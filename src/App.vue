@@ -5,9 +5,9 @@ import Dashboard from "./components/Dashboard.vue"
 </script>
 
 <template>
-  <div class="flex flex-col h-[100vh] w-full overflow-x-hidden">
+  <div class="h-[100vh] w-full flex flex-col overflow-x-hidden">
     <Header />
-    <main class="flex-1">
+    <main class="flex-1 overflow-hidden">
       <Dashboard />
     </main>
   </div>

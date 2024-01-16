@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import ChatHeader from './ChatHeader.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Send } from 'lucide-vue-next'
@@ -35,7 +36,7 @@ const messages = ref<Message[]>([
 <template>
   <Card class="h-full flex flex-col">
     <CardHeader>
-      <CardTitle>Agent</CardTitle>
+      <ChatHeader />
     </CardHeader>
     <CardContent class="flex-1">
       <div className="space-y-4">

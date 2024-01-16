@@ -3,6 +3,7 @@ import { presetUno, presetIcons, presetWebFonts, presetAttributify } from 'unocs
 import presetAnimations from "unocss-preset-animations"
 import { presetShadcn } from "unocss-preset-shadcn"
 import transformerDirectives from '@unocss/transformer-directives'
+import transformerVariantGroup from '@unocss/transformer-variant-group'
 
 export default defineConfig({
   // ...UnoCSS options
@@ -23,6 +24,7 @@ export default defineConfig({
   ],
   transformers: [
     transformerDirectives(),
+    // transformerVariantGroup(),
   ],
   content: {
     pipeline: {
