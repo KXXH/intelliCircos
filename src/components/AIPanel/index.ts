@@ -1,3 +1,3 @@
-import AIPanelVue from "./AIPanel.vue";
+import AIPanelVue from "./AIPanel.vue"
 
-export {AIPanelVue as AIPanel};
+export {AIPanelVue as AIPanel}

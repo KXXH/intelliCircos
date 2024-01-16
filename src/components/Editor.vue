@@ -5,7 +5,7 @@ const layoutStore = useLayoutStore()
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex h-full bg-background">
     <div class="h-full flex-[3]"></div>
     <!-- Sidebar -->
     <Transition enter-active-class="transition duration-300 ease-in-out" enter-from-class="transform translate-x-full"

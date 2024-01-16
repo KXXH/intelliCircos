@@ -6,7 +6,7 @@ import { AIPanel } from '@/components/AIPanel'
 <template>
   <div class="h-full w-full flex">
     <!-- Chat -->
-    <div class="border-r h-full w-250px lg:w-350px p-2">
+    <div class="border-r h-full w-250px lg:w-350px p-2 bg-background">
       <AIPanel />
     </div>
     <!-- Main -->
