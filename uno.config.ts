@@ -24,12 +24,13 @@ export default defineConfig({
   ],
   transformers: [
     transformerDirectives(),
-    // transformerVariantGroup(),
+    transformerVariantGroup(),
   ],
   content: {
     pipeline: {
       include: [
-        /\.(vue|svelte|[jt]s|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        "src/components/ui/**/*.{vue,js,ts,jsx,tsx}", // 适配shadcn-vue
       ],
     },
   },

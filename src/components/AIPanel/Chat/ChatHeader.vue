@@ -6,6 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { CardTitle } from '@/components/ui/card'
 import { RotateCcw } from 'lucide-vue-next'
 
 </script>

@@ -15,7 +15,7 @@ const layoutStore = useLayoutStore()
     <Transition enter-active-class="transition duration-300 ease-in-out" enter-from-class="transform translate-x-full"
       enter-to-class="transform translate-x-0" leave-active-class="transition duration-300 ease-in-out"
       leave-from-class="transform translate-x-0" leave-to-class="transform translate-x-full">
-      <div v-show="layoutStore.rightPanelOpen" class="absolute right-0 z-2 h-full w-[300px] border-l bg-background p-2 lg:static lg:flex-[1]">
+      <div v-show="layoutStore.rightPanelOpen" class="absolute right-0 z-2 h-full w-[300px] overflow-y-auto border-l bg-background p-2 lg:static lg:flex-[1]">
         <StylePanel />
       </div>
     </Transition>
@@ -23,7 +23,7 @@ const layoutStore = useLayoutStore()
     <div
       :data-state="layoutStore.rightPanelOpen ? 'open' : 'closed'"
       @click="() => layoutStore.toggleRightPanel()"
-      class="data-[state=open]:fade-in-0ßß absolute z-1 h-full w-full data-[state=closed]:animate-out data-[state=open]:animate-in bg-background/80 data-[state=closed]:hidden lg:hidden data-[state=closed]:fade-out-0"
+      class="absolute z-1 h-full w-full bg-background/80 transition-opacity duration-300 data-[state=closed]:pointer-events-none lg:hidden data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
     ></div>
 
   </div>
