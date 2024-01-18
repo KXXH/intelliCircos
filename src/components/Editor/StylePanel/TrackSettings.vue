@@ -55,7 +55,7 @@ watchEffect(() => {
     if(panelRef.value === null) return
     const svgElement = document.querySelector(`[data-track-id="${props.trackId}"]`) as HTMLElement
     if (svgElement) {
-      lineId = interactionStore.addGuideLineFromElement(svgElement, unrefElement(panelRef) as HTMLElement)
+      lineId = interactionStore.addGuideLineFromElement(svgElement, panelRef)
     }
   }
   else {

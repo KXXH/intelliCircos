@@ -2,6 +2,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useFigureStore } from './figure'
 import type { Track } from '@/lib/circos'
+import { unrefElement } from '@vueuse/core'
+import type { MaybeElementRef } from '@vueuse/core'
 
 interface GuideLine {
   x1: number
@@ -42,10 +44,14 @@ export const useInteractionStore = defineStore('interaction', () => {
     }
   }
 
-  const addGuideLineFromElement = (left_element: HTMLElement, right_element: HTMLElement) => {
-    console.log(left_element, right_element)
-    const left_rect = left_element.getBoundingClientRect()
-    const right_rect = right_element.getBoundingClientRect()
+  const addGuideLineFromElement = (left_element: MaybeElementRef, right_element: MaybeElementRef) => {
+    const left_element_ref = unrefElement(left_element)
+    const right_element_ref = unrefElement(right_element)
+    if (!left_element_ref || !right_element_ref) {
+      return null
+    }
+    const left_rect = left_element_ref.getBoundingClientRect()
+    const right_rect = right_element_ref.getBoundingClientRect()
     const line = {
       x1: left_rect.right,
       y1: left_rect.top + left_rect.height / 2,
