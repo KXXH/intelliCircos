@@ -1,3 +1,3 @@
-import StylePanel from "./StylePanel.vue"
+import StylePanel from './StylePanel.vue'
 
 export default StylePanel

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Sparkles, Wrench } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,9 +18,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 
-
 import { Chat } from '@/components/AIPanel/Chat'
-import { Sparkles, Wrench } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -31,13 +30,13 @@ import { Sparkles, Wrench } from 'lucide-vue-next'
       </TabsTrigger>
       <TabsTrigger value="password" class="space-x-1">
         <Wrench class="h-3 w-3" fill="var(----primary-foreground)" />
-        <span>  
+        <span>
           Advanced
         </span>
       </TabsTrigger>
     </TabsList>
     <TabsContent value="account" class="relative flex flex-1 flex-col">
-      <Chat class="flex-1"/>
+      <Chat class="flex-1" />
     </TabsContent>
     <TabsContent value="password">
       <Card>

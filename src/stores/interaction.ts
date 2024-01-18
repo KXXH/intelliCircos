@@ -1,9 +1,9 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useFigureStore } from './figure'
-import type { Track } from '@/lib/circos'
 import { unrefElement } from '@vueuse/core'
 import type { MaybeElementRef } from '@vueuse/core'
+import { useFigureStore } from './figure'
+import type { Track } from '@/lib/circos'
 
 interface GuideLine {
   x1: number
@@ -21,15 +21,13 @@ export const useInteractionStore = defineStore('interaction', () => {
   const activeTracks = ref<Track[]>([])
   const setActiveTrackId = (id: string) => {
     const track = figureStore.tracks.find(item => id === item.id)
-    if (track) {
+    if (track)
       activeTracks.value = [track]
-    }
   }
   const removeActiveTrackId = (id: string) => {
     const index = activeTracks.value.findIndex(item => id === item.id)
-    if (index > -1) {
+    if (index > -1)
       activeTracks.value.splice(index, 1)
-    }
   }
 
   const lines = ref<GuideLine[]>([])
@@ -39,17 +37,16 @@ export const useInteractionStore = defineStore('interaction', () => {
 
   const removeGuideLine = (id: string) => {
     const index = lines.value.findIndex(item => item.id === id)
-    if (index > -1) {
+    if (index > -1)
       lines.value.splice(index, 1)
-    }
   }
 
   const addGuideLineFromElement = (left_element: MaybeElementRef, right_element: MaybeElementRef) => {
     const left_element_ref = unrefElement(left_element)
     const right_element_ref = unrefElement(right_element)
-    if (!left_element_ref || !right_element_ref) {
+    if (!left_element_ref || !right_element_ref)
       return null
-    }
+
     const left_rect = left_element_ref.getBoundingClientRect()
     const right_rect = right_element_ref.getBoundingClientRect()
     const line = {
@@ -58,13 +55,11 @@ export const useInteractionStore = defineStore('interaction', () => {
       x2: right_rect.left,
       y2: right_rect.top + right_rect.height / 2,
       show: true,
-      id: `${++id}`
+      id: `${++id}`,
     }
     addGuideLine(line)
     return String(id)
   }
-
-
 
   return { activeTracks, setActiveTrackId, removeActiveTrackId, addGuideLine, removeGuideLine, addGuideLineFromElement, lines }
 })

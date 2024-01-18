@@ -22,7 +22,7 @@ const { width, height } = useWindowSize()
 </script>
 
 <template>
-  <svg :view-box="`0 0 ${width} ${height}`" :width="width" :height="width"     pointer-events-none fixed h-full w-full >
+  <svg :view-box="`0 0 ${width} ${height}`" :width="width" :height="width" pointer-events-none fixed h-full w-full>
     <line v-if="isValidProps" :x1="props.x1" :y1="props.y1" :x2="props.x2" :y2="props.y2" stroke="red" stroke-width="1" />
   </svg>
 </template>

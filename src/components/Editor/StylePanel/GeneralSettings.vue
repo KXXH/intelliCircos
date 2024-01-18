@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
 import SettingsPanel from './SettingsPanel.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useForm } from 'vee-validate'
 import {
+  FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormControl,
 } from '@/components/ui/form'
-import { toTypedSchema } from '@vee-validate/zod'
-import { z } from 'zod'
 
 const isOpen = ref(true)
 
@@ -31,23 +31,23 @@ const onSubmit = form.handleSubmit((values) => {
 </script>
 
 <template>
-  <SettingsPanel panel-title="General Settings" v-model:open="isOpen">
-    <form @submit.prevent="onSubmit" class="space-y-2">
-        <FormField v-slot="{ componentField }" name="figureSize" >
-          <FormItem>
-            <FormLabel>Figure Size</FormLabel>
-            <FormControl>
-              <Input v-bind="componentField" type="number"/>
-            </FormControl>
-            <FormDescription>
-              The size of the figure in percentage
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <Button type="submit" variant="default" size="sm" w-full>
-          Save
-        </Button>
-      </form>
+  <SettingsPanel v-model:open="isOpen" panel-title="General Settings">
+    <form class="space-y-2" @submit.prevent="onSubmit">
+      <FormField v-slot="{ componentField }" name="figureSize">
+        <FormItem>
+          <FormLabel>Figure Size</FormLabel>
+          <FormControl>
+            <Input v-bind="componentField" type="number" />
+          </FormControl>
+          <FormDescription>
+            The size of the figure in percentage
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <Button type="submit" variant="default" size="sm" w-full>
+        Save
+      </Button>
+    </form>
   </SettingsPanel>
 </template>

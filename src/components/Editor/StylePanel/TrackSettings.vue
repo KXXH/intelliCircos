@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
+import { useMouseInElement } from '@vueuse/core'
+import type { MaybeElementRef } from '@vueuse/core'
 import SettingsPanel from './SettingsPanel.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useForm } from 'vee-validate'
 import {
+  FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormControl,
 } from '@/components/ui/form'
-import { toTypedSchema } from '@vee-validate/zod'
-import { z } from 'zod'
 import { hexColorSchema } from '@/lib/zodSchema'
 
-import { useInteractionStore } from "@/stores/interaction"
-import { useMouseInElement, unrefElement } from '@vueuse/core'
-import type { MaybeElementRef } from '@vueuse/core'
+import { useInteractionStore } from '@/stores/interaction'
 
 // Form data
 const props = defineProps<{
@@ -52,11 +52,11 @@ let lineId: null | string = null
 watchEffect(() => {
   if (!isOutside.value) {
     interactionStore.setActiveTrackId(props.trackId)
-    if(panelRef.value === null) return
+    if (panelRef.value === null)
+      return
     const svgElement = document.querySelector(`[data-track-id="${props.trackId}"]`) as HTMLElement
-    if (svgElement) {
+    if (svgElement)
       lineId = interactionStore.addGuideLineFromElement(svgElement, panelRef)
-    }
   }
   else {
     interactionStore.removeActiveTrackId(props.trackId)
@@ -66,15 +66,16 @@ watchEffect(() => {
     }
   }
 })
-
 </script>
 
 <template>
-  <SettingsPanel :panel-title="`Track ${props.trackTitle}`" v-model:open="isOpen" ref="panelRef" class="rounded-md"
+  <SettingsPanel
+    ref="panelRef" v-model:open="isOpen" :panel-title="`Track ${props.trackTitle}`" class="rounded-md"
     :class="{
       // 'outline outline-border': !isOutside,
-    }">
-    <form @submit.prevent="onSubmit" class="space-y-2">
+    }"
+  >
+    <form class="space-y-2" @submit.prevent="onSubmit">
       <FormField v-slot="{ componentField }" name="trackTitle">
         <FormItem>
           <FormLabel>Track title</FormLabel>

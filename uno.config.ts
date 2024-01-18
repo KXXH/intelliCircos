@@ -1,7 +1,6 @@
-import { defineConfig } from 'unocss'
-import { presetUno, presetIcons, presetWebFonts, presetAttributify } from 'unocss'
-import presetAnimations from "unocss-preset-animations"
-import { presetShadcn } from "unocss-preset-shadcn"
+import { defineConfig, presetAttributify, presetIcons, presetUno, presetWebFonts } from 'unocss'
+import presetAnimations from 'unocss-preset-animations'
+import { presetShadcn } from 'unocss-preset-shadcn'
 import transformerDirectives from '@unocss/transformer-directives'
 import transformerVariantGroup from '@unocss/transformer-variant-group'
 
@@ -13,8 +12,8 @@ export default defineConfig({
     presetWebFonts({
       provider: 'fontshare',
       fonts: {
-        'rounded': 'Nunito'
-      }
+        rounded: 'Nunito',
+      },
     }),
     presetAttributify(),
     presetAnimations(),
@@ -30,7 +29,7 @@ export default defineConfig({
     pipeline: {
       include: [
         /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
-        "src/components/ui/**/*.{vue,js,ts,jsx,tsx}", // 适配shadcn-vue
+        'src/components/ui/**/*.{vue,js,ts,jsx,tsx}', // 适配shadcn-vue
       ],
     },
   },
