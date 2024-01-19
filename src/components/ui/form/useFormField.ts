@@ -1,6 +1,11 @@
 import { FieldContextKey, useFieldError, useIsFieldDirty, useIsFieldTouched, useIsFieldValid } from 'vee-validate'
 import { inject } from 'vue'
-import { FORM_ITEM_INJECTION_KEY } from './FormItem.vue'
+import type { InjectionKey } from 'vue'
+// import { FORM_ITEM_INJECTION_KEY } from './FormItem.vue'
+
+export const FORM_ITEM_INJECTION_KEY
+  // eslint-disable-next-line symbol-description
+  = Symbol() as InjectionKey<string>
 
 export function useFormField() {
   const fieldContext = inject(FieldContextKey)

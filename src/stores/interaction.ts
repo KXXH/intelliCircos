@@ -2,23 +2,25 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { unrefElement } from '@vueuse/core'
 import type { MaybeElementRef } from '@vueuse/core'
+import type { CurvePoint } from '@/lib/guideLine'
 import { useFigureStore } from './figure'
-import type { Track } from '@/lib/circos'
+import type { TrackBase } from '@/lib/circos'
 
-interface GuideLine {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  show: boolean
-  id: string
-}
+// interface GuideLine {
+//   x1: number
+//   y1: number
+//   x2: number
+//   y2: number
+//   show: boolean
+//   id: string
+// }
+type Curve = CurvePoint[]
 
 let id = 0
 
 export const useInteractionStore = defineStore('interaction', () => {
   const figureStore = useFigureStore()
-  const activeTracks = ref<Track[]>([])
+  const activeTracks = ref<TrackBase[]>([])
   const setActiveTrackId = (id: string) => {
     const track = figureStore.tracks.find(item => id === item.id)
     if (track)
@@ -30,15 +32,16 @@ export const useInteractionStore = defineStore('interaction', () => {
       activeTracks.value.splice(index, 1)
   }
 
-  const lines = ref<GuideLine[]>([])
-  const addGuideLine = (line: GuideLine) => {
+  const lines = ref<Curve[]>([])
+  const addGuideLine = (line: Curve) => {
     lines.value.push(line)
   }
 
-  const removeGuideLine = (id: string) => {
-    const index = lines.value.findIndex(item => item.id === id)
-    if (index > -1)
-      lines.value.splice(index, 1)
+  const removeGuideLine = (curve: Curve) => {
+    // const index = lines.value.findIndex(item => item.id === id)
+    // if (index > -1)
+    //   lines.value.splice(index, 1)
+    lines.value = lines.value.filter(item => item !== curve)
   }
 
   const addGuideLineFromElement = (left_element: MaybeElementRef, right_element: MaybeElementRef) => {

@@ -1,5 +1,4 @@
 // import '@unocss/reset/normalize.css'
-import 'v-calendar/style.css'
 import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'
 import './assets/base.css'

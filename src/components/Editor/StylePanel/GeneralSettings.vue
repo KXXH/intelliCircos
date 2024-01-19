@@ -26,7 +26,7 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit((values) => {
-  console.log('Form submitted!', values)
+  // console.log('Form submitted!', values)
 })
 </script>
 
