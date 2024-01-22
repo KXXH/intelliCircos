@@ -1,0 +1,3 @@
+[submodule "src/lib/circosJS"]
+	path = src/lib/circosJS
+	url = git@github.com:KXXH/circosJS.git
