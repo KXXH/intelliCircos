@@ -4,11 +4,13 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/lib/circosJS/dist/circos.module": ["./types/circos/circos.d.ts"],
+      "@/*": ["./src/*"],
+      "*": ["src/*", "types/*"]
     },
     "strict": true,
     "noEmit": true
   },
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "types/**/*.d.ts"],
   "exclude": ["src/**/__tests__/*"]
 }
