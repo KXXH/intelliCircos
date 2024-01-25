@@ -1,4 +1,5 @@
-import type { ChordData, GenomeData } from './data'
+import type { Nullish } from 'utility-types'
+import type { ChordData, GenomeData, HeatmapData, HighlightData, HistogramData, KaryotypeData, LineData, ScatterData, StackData, TextData } from './data'
 
 interface AxesConfig {
   axes: any[]
@@ -24,14 +25,14 @@ interface ValueConfig {
   logScaleBase: number
 }
 
-interface CommonConfig {
+interface CommonConfig<T> {
   zIndex: boolean
   opacity: number
-  tooltipContent: any
+  tooltipContent: ((dataItem: T) => string) | Nullish
   events: object
 }
 
-export interface LineConfig extends AxesConfig, RadialConfig, CommonConfig, ValueConfig {
+export interface LineConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
   direction: string
   color: string | ((dataItem: GenomeData) => string)
   fill: boolean
@@ -41,7 +42,7 @@ export interface LineConfig extends AxesConfig, RadialConfig, CommonConfig, Valu
   backgrounds: any[]
 }
 
-export interface ScatterConfig extends AxesConfig, RadialConfig, CommonConfig, ValueConfig {
+export interface ScatterConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
   direction: string
   color: string | ((dataItem: GenomeData) => string)
   fill: boolean
@@ -52,30 +53,30 @@ export interface ScatterConfig extends AxesConfig, RadialConfig, CommonConfig, V
   backgrounds: any[]
 }
 
-export interface HistogramConfig extends AxesConfig, RadialConfig, CommonConfig, ValueConfig {
+export interface HistogramConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
   direction: string
   color: string | ((dataItem: GenomeData) => string)
   fill: boolean
   backgrounds: any[]
 }
 
-export interface HeatmapConfig extends RadialConfig, CommonConfig, ValueConfig {
+export interface HeatmapConfig<T> extends RadialConfig, CommonConfig<T>, ValueConfig {
   color: string | ((dataItem: GenomeData) => string)
   backgrounds: any[]
 }
 
-export interface ChordConfig extends CommonConfig, ValueConfig {
+export interface ChordConfig<T> extends CommonConfig<T>, ValueConfig {
   color: string | ((dataItem: ChordData) => string)
   radius: number
 }
 
-export interface HighlightConfig extends CommonConfig {
+export interface HighlightConfig<T> extends CommonConfig<T>, RadialConfig {
   color: string | ((dataItem: GenomeData) => string)
   strokeColor: string
   strokeWidth: number
 }
 
-export interface StackConfig extends AxesConfig, RadialConfig, CommonConfig, ValueConfig {
+export interface StackConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
   color: string | ((dataItem: GenomeData) => string)
   direction: string
   thickness: number
@@ -86,7 +87,7 @@ export interface StackConfig extends AxesConfig, RadialConfig, CommonConfig, Val
   backgrounds: any[]
 }
 
-export interface TextConfig extends CommonConfig, RadialConfig {
+export interface TextConfig<T> extends CommonConfig<T>, RadialConfig {
   style: Record<string, unknown>
   color: string | ((dataItem: GenomeData) => string)
   backgrounds: any[]

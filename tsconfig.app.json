@@ -4,7 +4,7 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/lib/circosJS/dist/circos.module": ["./types/circos/circos.d.ts"],
+      "@/lib/circosJS/dist/circos.module": [".src/lib/circosJS/dist/circos.module", "./types/circos/circos.d.ts"],
       "@/*": ["./src/*"],
       "*": ["src/*", "types/*"]
     },

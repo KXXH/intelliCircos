@@ -24,5 +24,31 @@ interface EndpointData {
 export interface ChordData {
   start: EndpointData
   end: EndpointData
-  [key: string]: any
 }
+
+export interface LineData {
+  block_id: string
+  position: number
+  value: number
+}
+
+export interface HeatmapData {
+  block_id: string
+  start: number
+  end: number
+  value: number
+}
+
+export interface StackData {
+  block_id: string
+  start: number
+  end: number
+}
+
+export interface TextData extends LineData {
+  value: string
+}
+
+export type HistogramData = HeatmapData
+export type HighlightData = StackData
+export type ScatterData = LineData

@@ -1,4 +1,5 @@
-import type { ChordData, GenomeData, KaryotypeData } from './data'
+import type { DeepPartial } from 'utility-types'
+import type { ChordData, GenomeData, HeatmapData, HighlightData, HistogramData, KaryotypeData, LineData, ScatterData, StackData, TextData } from './data'
 import type { ChordConfig, HeatmapConfig, HighlightConfig, HistogramConfig, LineConfig, ScatterConfig, StackConfig, TextConfig } from './trackConfig'
 
 declare module '@/lib/circosJS/dist/circos.module' {
@@ -54,22 +55,23 @@ declare module '@/lib/circosJS/dist/circos.module' {
   }
 
   export class Core {
-    constructor(config: Partial<ContainerConfig>)
+    constructor(config: DeepPartial<ContainerConfig>)
     removeTracks(trackIds: string | string[]): Core
-    layout(data: KaryotypeData, conf: Partial<LayoutConfig>): Core
-    chord(id: string, data: ChordConfig, conf: Partial<ChordConfig>): Core
-    heatmap(id: string, data: GenomeData, conf: Partial<HeatmapConfig>): Core
-    highlight(id: string, data: any, conf: Partial<HighlightConfig>): Core
-    histogram(id: string, data: GenomeData, conf: Partial<HistogramConfig>): Core
-    line(id: string, data: GenomeData, conf: Partial<LineConfig>): Core
-    scatter(id: string, data: GenomeData, conf: Partial<ScatterConfig>): Core
-    stack(id: string, data: any, conf: Partial<StackConfig>): Core
-    text(id: string, data: any, conf: Partial<TextConfig>): Core
+    layout(data: KaryotypeData[], conf: DeepPartial<LayoutConfig>): Core
+    chord<T extends ChordData>(id: string, data: T[], conf: DeepPartial<ChordConfig<T>>): Core
+    heatmap<T extends HeatmapData>(id: string, data: T[], conf: DeepPartial<HeatmapConfig<T>>): Core
+    highlight<T extends HighlightData>(id: string, data: T[], conf: DeepPartial<HighlightConfig<T>>): Core
+    histogram<T extends HistogramData>(id: string, data: T[], conf: DeepPartial<HistogramConfig<T>>): Core
+    line<T extends LineData>(id: string, data: T[], conf: DeepPartial<LineConfig<T>>): Core
+    scatter<T extends ScatterData>(id: string, data: T[], conf: DeepPartial<ScatterConfig<T>>): Core
+    stack<T extends StackData>(id: string, data: T[], conf: DeepPartial<StackConfig<T>>): Core
+    text<T extends TextData>(id: string, data: T[], conf: DeepPartial<TextConfig<T>>): Core
     render(): void
   }
-
-  export interface Circos {
-    new (conf: Partial<ContainerConfig>): Core
-    (conf: Partial<ContainerConfig>): Core
-  }
+  // export interface Circos {
+  //   new (conf: Partial<ContainerConfig>): Core
+  //   (conf: Partial<ContainerConfig>): Core
+  // }
+  // export type Circos = Core
+  export function Circos(conf: Partial<ContainerConfig>): Core
 }

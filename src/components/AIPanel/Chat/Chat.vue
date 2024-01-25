@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Send } from 'lucide-vue-next'
 import ChatHeader from './ChatHeader.vue'
+import ChatTextArea from './ChatTextArea.vue'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -51,14 +49,8 @@ const messages = ref<Message[]>([
         </div>
       </div>
     </CardContent>
-    <CardFooter>
-      <form class="w-full flex items-center space-x-2">
-        <Input class="flex-1 text-xs" placeholder="Type your message..." />
-        <Button type="submit" size="icon" class="h-9 w-9">
-          <Send class="h-4 w-4" />
-          <span className="sr-only">Send</span>
-        </Button>
-      </form>
+    <CardFooter border-t="~" class="p-4">
+      <ChatTextArea />
     </CardFooter>
   </Card>
 </template>

@@ -16,8 +16,8 @@ import { CardTitle } from '@/components/ui/card'
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger as-child>
-          <Button variant="destructive" class="rounded-full" size="icon">
-            <RotateCcw class="h-4 w-4" />
+          <Button class="rounded-full" size="icon" variant="ghost">
+            <RotateCcw class="h-4 w-4" :stroke-width="2" />
             <span className="sr-only">Reset Chat</span>
           </Button>
         </TooltipTrigger>

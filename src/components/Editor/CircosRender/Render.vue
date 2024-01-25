@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { csvParse } from 'd3'
-import { type VNodeRef, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import GRCh37Raw from '@/lib/circosJS/demo/data/GRCh37.json'
 import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
 import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
@@ -13,7 +13,7 @@ import { Circos } from '@/lib/circosJS/dist/circos.module'
 
 const el = ref<HTMLElement>()
 
-const gieStainColor = {
+const gieStainColor: Record<string, string> = {
   gpos100: 'rgb(0,0,0)',
   gpos: 'rgb(0,0,0)',
   gpos75: 'rgb(130,130,130)',
@@ -48,7 +48,7 @@ const snp250 = csvParse(snp250Raw).map((d) => {
   return {
     block_id: d.chromosome,
     position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: d.value,
+    value: +d.value,
   }
 })
 
@@ -56,20 +56,20 @@ const snp = csvParse(snpRaw).map((d) => {
   return {
     block_id: d.chromosome,
     position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: d.value,
+    value: +d.value,
   }
 })
 const snp1m = csvParse(snp1mRaw).map((d) => {
   return {
     block_id: d.chromosome,
     position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: d.value,
+    value: +d.value,
   }
 })
 
 onMounted(() => {
   const width = 500
-  const circosLine = new Circos({
+  const circosLine = Circos({
     container: el.value,
   })
   circosLine
@@ -130,7 +130,7 @@ onMounted(() => {
       max: 0.015,
       fill: false,
       strokeWidth: 0,
-      tooltipContent(d, i) {
+      tooltipContent(d) {
         return `${d.block_id}:${Math.round(d.position)} ➤ ${d.value}`
       },
     })

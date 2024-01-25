@@ -33,4 +33,10 @@ export default defineConfig({
       ],
     },
   },
+  theme: {
+    colors: {
+      'warning': 'hsl(var(--warning))',
+      'warning-foreground': 'hsl(var(--warning-foreground))',
+    },
+  },
 })
