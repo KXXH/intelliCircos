@@ -136,9 +136,14 @@ watchEffect(() => {
           <FormMessage />
         </FormItem>
       </FormField>
-      <Button type="submit" variant="default" size="sm" w-full>
-        Save
-      </Button>
+      <div flex="~ wrap" gap-2>
+        <Button type="submit" size="sm" flex-1>
+          Save
+        </Button>
+        <Button variant="destructive" size="sm" flex-1>
+          Remove
+        </Button>
+      </div>
     </form>
   </SettingsPanel>
 </template>

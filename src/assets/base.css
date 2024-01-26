@@ -5,9 +5,17 @@ body {
 :root {
   --warning: 38 92% 50%;
   --warning-foreground: 48 96% 89%;
+  --danger: 0 100% 50%;
+  --danger-foreground: 0 100% 100%;
+  --success: 142.1 76.2% 36.3%;
+  --success-foreground: 355.7 100% 97.3%;
 }
 
 .dark {
   --warning: 48 96% 89%;
   --warning-foreground: 38 92% 50%;
+  --danger: 0 100% 100%;
+  --danger-foreground: 0 100% 50%;
+  --success: 142.1 70.6% 45.3%;
+  --success-foreground: 144.9 80.4% 10%;
 }

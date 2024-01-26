@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Sparkles, Wrench } from 'lucide-vue-next'
+import { Advanced } from './Advanced'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -35,11 +36,12 @@ import { Chat } from '@/components/AIPanel/Chat'
         </span>
       </TabsTrigger>
     </TabsList>
-    <TabsContent value="account" class="relative flex flex-1 flex-col">
+    <TabsContent value="account" class="relative flex flex-1 flex-col data-[state=inactive]:hidden">
       <Chat class="flex-1" />
     </TabsContent>
-    <TabsContent value="password">
-      <Card>
+    <TabsContent value="password" class="relative flex flex-1 flex-col data-[state=inactive]:hidden">
+      <Advanced />
+      <!-- <Card>
         <CardHeader>
           <CardTitle>Password</CardTitle>
           <CardDescription>
@@ -59,7 +61,7 @@ import { Chat } from '@/components/AIPanel/Chat'
         <CardFooter>
           <Button>Save password</Button>
         </CardFooter>
-      </Card>
+      </Card> -->
     </TabsContent>
   </Tabs>
 </template>

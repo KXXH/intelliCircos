@@ -37,6 +37,13 @@ export default defineConfig({
     colors: {
       'warning': 'hsl(var(--warning))',
       'warning-foreground': 'hsl(var(--warning-foreground))',
+      'danger': 'hsl(var(--danger))',
+      'danger-foreground': 'hsl(var(--danger-foreground))',
+      'success': 'hsl(var(--success))',
+      'success-foreground': 'hsl(var(--success-foreground))',
     },
   },
+  safelist: [
+    ...['red', 'green', 'blue', 'yellow', 'purple', 'pink', 'indigo', 'gray', 'orange', 'teal', 'violet', 'black'].map(c => `fill-${c}`),
+  ],
 })

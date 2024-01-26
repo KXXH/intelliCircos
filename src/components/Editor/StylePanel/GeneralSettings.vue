@@ -25,7 +25,7 @@ const form = useForm({
   validationSchema: generalSettingSchema,
 })
 
-const onSubmit = form.handleSubmit((values) => {
+const onSubmit = form.handleSubmit(() => {
   // console.log('Form submitted!', values)
 })
 </script>
@@ -45,8 +45,10 @@ const onSubmit = form.handleSubmit((values) => {
           <FormMessage />
         </FormItem>
       </FormField>
-      <Button type="submit" variant="default" size="sm" w-full>
-        Save
+      <Button type="submit" variant="default" size="sm" w-full space-x-2>
+        <span>
+          Add Track
+        </span>
       </Button>
     </form>
   </SettingsPanel>
