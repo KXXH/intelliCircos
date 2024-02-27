@@ -1,52 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import ChatHeader from './ChatHeader.vue'
 import ChatTextArea from './ChatTextArea.vue'
+import ChatBubble from './ChatBubble.vue'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
 
-interface Message {
-  id: string
-  text: string
-  role: 'user' | 'agent'
-}
+import { useChat } from '@/lib/ai/client'
 
-const messages = ref<Message[]>([
+const { messages } = useChat()
+messages.value = [
   {
-    id: '1',
+    id: '-1',
     text: 'Hello, how can I help you?',
     role: 'agent',
+    lastUpdated: Date.now(),
   },
-  {
-    id: '2',
-    text: 'I need help with my account',
-    role: 'user',
-  },
-  {
-    id: '3',
-    text: 'Ok, I can help you with that',
-    role: 'agent',
-  },
-])
+]
 </script>
 
 <template>
   <Card class="h-full flex flex-col">
-    <CardHeader>
+    <CardHeader class="border-b py-2">
       <ChatHeader />
     </CardHeader>
-    <CardContent class="flex-1">
+    <CardContent class="flex-1 overflow-auto py-2">
       <div className="space-y-4">
-        <div
-          v-for="message in messages" :key="message.id" :class="cn(
-            'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-xs',
-            message.role === 'user'
-              ? 'ml-auto bg-primary text-primary-foreground'
-              : 'bg-muted',
-          )"
-        >
-          {{ message.text }}
-        </div>
+        <ChatBubble
+          v-for="message in messages"
+          :key="message.id"
+          :text="message.text"
+          :role="message.role"
+          :loading="message.loading"
+        />
       </div>
     </CardContent>
     <CardFooter border-t="~" class="p-4">

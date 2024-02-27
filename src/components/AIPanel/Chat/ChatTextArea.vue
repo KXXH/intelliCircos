@@ -5,16 +5,17 @@ import { ref } from 'vue'
 import AutoComplete from './AutoComplete.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from '@/components/ui/command'
+
+// import {
+//   Command,
+//   CommandEmpty,
+//   CommandGroup,
+//   CommandInput,
+//   CommandItem,
+//   CommandList,
+//   CommandSeparator,
+//   CommandShortcut,
+// } from '@/components/ui/command'
 
 // const listOpen = ref(false)
 // const value = ref('')

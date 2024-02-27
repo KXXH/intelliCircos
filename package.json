@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@langchain/core": "^0.1.34",
     "@radix-icons/vue": "^1.0.0",
     "@unocss/reset": "^0.58.3",
     "@vee-validate/zod": "^4.12.4",

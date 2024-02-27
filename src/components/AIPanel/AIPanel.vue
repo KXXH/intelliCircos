@@ -36,7 +36,7 @@ import { Chat } from '@/components/AIPanel/Chat'
         </span>
       </TabsTrigger>
     </TabsList>
-    <TabsContent value="account" class="relative flex flex-1 flex-col data-[state=inactive]:hidden">
+    <TabsContent value="account" class="relative flex flex-1 flex-col overflow-hidden data-[state=inactive]:hidden">
       <Chat class="flex-1" />
     </TabsContent>
     <TabsContent value="password" class="relative flex flex-1 flex-col data-[state=inactive]:hidden">

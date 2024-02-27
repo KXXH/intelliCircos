@@ -6,6 +6,10 @@ import {
   Card,
 } from '@/components/ui/card'
 
+import { useChat } from '@/lib/ai/client'
+
+const { sendMessage } = useChat()
+
 interface Command {
   name: string
   description: string
@@ -68,6 +72,13 @@ function keydown(event: KeyboardEvent) {
     activeIndex.value = -1
   }
 }
+
+function send() {
+  if (value.value === '')
+    return
+  sendMessage(value.value)
+  value.value = ''
+}
 </script>
 
 <template>
@@ -110,7 +121,7 @@ function keydown(event: KeyboardEvent) {
         @keydown="keydown"
       />
       <Button size="icon" variant="default">
-        <Send class="h-4 w-4" />
+        <Send class="h-4 w-4" @click="send" />
       </Button>
     </div>
   </div>

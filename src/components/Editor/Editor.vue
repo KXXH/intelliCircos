@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CircosView from './CircosView.vue'
 import StylePanel from './StylePanel'
+import Explainer from './RecommendExplainer/Explainer.vue'
 import { useLayoutStore } from '@/stores/layout'
 
 const layoutStore = useLayoutStore()
@@ -8,8 +9,9 @@ const layoutStore = useLayoutStore()
 
 <template>
   <div class="relative h-full flex bg-background">
-    <div class="h-full flex-[3]">
+    <div class="relative h-full flex flex-[3] flex-col overflow-x-hidden">
       <CircosView />
+      <!-- <Explainer /> -->
     </div>
     <!-- Sidebar -->
     <Transition

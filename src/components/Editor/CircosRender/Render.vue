@@ -205,5 +205,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="el" h-full w-full flex="~ items-center content-center" p-4 />
+  <div ref="el" h-full w-full flex="~ items-center content-center overflow-hidden" p-4 />
 </template>
