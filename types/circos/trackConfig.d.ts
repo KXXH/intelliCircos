@@ -33,7 +33,7 @@ interface CommonConfig<T> {
 }
 
 export interface LineConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
-  direction: string
+  direction: 'in' | 'out'
   color: string | ((dataItem: GenomeData) => string)
   fill: boolean
   fillColor: string
@@ -78,7 +78,7 @@ export interface HighlightConfig<T> extends CommonConfig<T>, RadialConfig {
 
 export interface StackConfig<T> extends AxesConfig, RadialConfig, CommonConfig<T>, ValueConfig {
   color: string | ((dataItem: GenomeData) => string)
-  direction: string
+  direction: 'in' | 'out' | 'center'
   thickness: number
   radialMargin: number
   margin: number
