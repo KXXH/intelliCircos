@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { HumanMessage } from '@langchain/core/messages'
 import ChatHeader from './ChatHeader.vue'
 import ChatTextArea from './ChatTextArea.vue'
 import ChatBubble from './ChatBubble.vue'
@@ -6,10 +7,10 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 
 import { useChat } from '@/lib/ai/client'
 
-const { messages } = useChat()
+const { messages, reloadMessage } = useChat()
 messages.value = [
   {
-    id: '-1',
+    id: -1,
     text: 'Hello, how can I help you?',
     role: 'agent',
     lastUpdated: Date.now(),
@@ -30,6 +31,9 @@ messages.value = [
           :text="message.text"
           :role="message.role"
           :loading="message.loading"
+          :code="message.code"
+          :reference="message.reference"
+          @reload="() => reloadMessage(message.id)"
         />
       </div>
     </CardContent>

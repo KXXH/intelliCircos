@@ -1,42 +1,104 @@
 <script setup lang="ts">
-import { Loader2 } from 'lucide-vue-next'
+import { Code, Loader2, Paperclip, Play, RotateCw, View } from 'lucide-vue-next'
+import ChatBubbleAction from './ChatBubbleAction.vue'
 import { cn } from '@/lib/utils'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import type { Reference } from '@/lib/ai/client'
+import TooltipButton from '@/components/ui/tooltip-button/TooltipButton.vue'
 
 defineProps<{
+  code?: string
   text: string
   role: 'user' | 'agent'
   loading?: boolean
+  reference?: Reference[]
+}>()
+
+const emits = defineEmits<{
+  reload: []
 }>()
 </script>
 
 <template>
   <div
     :class="cn(
-      'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-xs arrow relative',
+      'flex w-max max-w-[75%] flex-col gap-1 rounded-lg px-3 py-2 text-xs arrow relative',
       role === 'user'
         ? 'ml-auto bg-primary text-primary-foreground arrow-user'
         : 'bg-muted arrow-agent',
     )"
   >
-    <template v-if="loading && text.length === 0">
+    <template v-if="loading && text.length === 0 && code == null">
       <Loader2 class="h-4 w-4 animate-in animate-duration-500 animate-iteration-infinite spin-in-360" />
     </template>
     <template v-else>
-      {{ text }}
+      <div>
+        {{ text }}
+      </div>
+      <template v-if="code">
+        <div flex gap-1>
+          <ChatBubbleAction hint="Code">
+            <template #icon>
+              <Code class="h-4 w-4" />
+            </template>
+            <template #popover>
+              <div text-xs>
+                <div mb-1 flex items-center gap-2 font-bold>
+                  <span>Code</span>
+                  <div flex="~ 1" />
+                  <TooltipButton side="top" :side-offset="5" class="h-6 w-6 rounded-1" variant="secondary" size="icon">
+                    <View class="h-4 w-4" />
+                    <template #hint>
+                      <div text-xs>
+                        Preview
+                      </div>
+                    </template>
+                  </TooltipButton>
+                  <TooltipButton side="top" :side-offset="5" class="h-6 w-6 rounded-1" variant="secondary" size="icon">
+                    <Play class="h-4 w-4" />
+                    <template #hint>
+                      <div text-xs>
+                        Run code
+                      </div>
+                    </template>
+                  </TooltipButton>
+                  <!-- <Button variant="secondary" size="icon" class="h-6 w-6">
+                    <Play class="h-4 w-4" />
+                  </Button> -->
+                </div>
+                <pre class="rounded bg-zinc-950 p-1 text-wrap text-xs text-white dark:bg-zinc-900"><code>{{ code }}</code></pre>
+              </div>
+            </template>
+          </ChatBubbleAction>
+          <ChatBubbleAction v-if="reference" hint="References">
+            <template #icon>
+              <Paperclip class="h-4 w-4" />
+            </template>
+            <template #popover>
+              <div text-xs>
+                <div font-bold>
+                  References
+                </div>
+                <ul list-disc pl-5>
+                  <li v-for="document in reference" :key="document.url">
+                    <Button variant="link" class="h-5 px-0 py-0 text-xs" as="a" :href="document.url">
+                      {{ document.title }}
+                    </Button>
+                  </li>
+                </ul>
+              </div>
+            </template>
+          </ChatBubbleAction>
+          <ChatBubbleAction hint="Reload" @click="emits('reload')">
+            <template #icon>
+              <RotateCw class="h-4 w-4" />
+            </template>
+          </ChatBubbleAction>
+        </div>
+      </template>
+      <!-- <code v-if="code" bg="background" p="1" rounded>{{ code }}</code> -->
     </template>
   </div>
-  <!-- <Skeleton
-    v-else
-    :class="cn(
-      'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-xs min-h-[1em] box-content min-w-[3ch]',
-      role === 'user'
-        ? 'ml-auto bg-primary text-primary-foreground'
-        : 'bg-muted',
-    )"
-  >
-    {{ text }}
-  </Skeleton> -->
 </template>
 
 <style scoped>
