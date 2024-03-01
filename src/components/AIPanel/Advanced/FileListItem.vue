@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Circle, Dna, Eye, X } from 'lucide-vue-next'
+import { Dna, Eye, X } from 'lucide-vue-next'
 import { withDefaults } from 'vue'
 import FileColorPick from './FileColorPick.vue'
 import { Button } from '@/components/ui/button'

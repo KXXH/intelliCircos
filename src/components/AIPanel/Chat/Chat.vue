@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { HumanMessage } from '@langchain/core/messages'
 import ChatHeader from './ChatHeader.vue'
 import ChatTextArea from './ChatTextArea.vue'
 import ChatBubble from './ChatBubble.vue'

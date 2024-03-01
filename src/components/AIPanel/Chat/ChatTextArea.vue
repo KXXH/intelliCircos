@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { Send } from 'lucide-vue-next'
-import { ComboboxAnchor } from 'radix-vue'
-import { ref } from 'vue'
 import AutoComplete from './AutoComplete.vue'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 // import {
 //   Command,

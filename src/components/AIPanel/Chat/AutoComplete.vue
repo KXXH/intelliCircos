@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: 重构本组件，把发送逻辑放到外面
 import { ref } from 'vue'
 import { Send } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'

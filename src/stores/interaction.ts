@@ -2,8 +2,8 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { unrefElement } from '@vueuse/core'
 import type { MaybeElementRef } from '@vueuse/core'
-import type { CurvePoint } from '@/lib/guideLine'
 import { useFigureStore } from './figure'
+import type { CurvePoint } from '@/lib/guideLine'
 import type { TrackBase } from '@/lib/circos'
 
 // interface GuideLine {

@@ -1,5 +1,5 @@
 import { RemoteRunnable } from '@langchain/core/runnables/remote'
-import { type Ref, reactive, ref,
+import { reactive, ref,
 } from 'vue'
 import { AIMessage, HumanMessage } from '@langchain/core/messages'
 import type { AIMessageChunk, BaseMessage } from '@langchain/core/messages'
