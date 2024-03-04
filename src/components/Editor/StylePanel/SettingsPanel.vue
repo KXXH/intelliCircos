@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ChevronDown, ChevronUp } from 'lucide-vue-next'
+import { watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import {
   Collapsible,

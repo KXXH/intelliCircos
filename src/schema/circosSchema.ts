@@ -55,48 +55,48 @@ export const TextData = z.object({
 })
 
 // trackConfig.d.ts
-export const AxesConfig = z.object({
-  axes: z.array(z.unknown()),
-  showAxesTooltip: z.boolean(),
-})
+export const AxesConfigObj = {
+  // axes: z.array(z.unknown()).optional(), // TODO: 暂时不允许设置axis
+  showAxesTooltip: z.boolean().default(true).describe('Whether to show the tooltip of the axis'),
+}
 
-export const PaletteConfig = z.object({
+export const PaletteConfigObj = {
   colorPaletteSize: z.number(),
   colorPalette: z.string(),
   usePalette: z.boolean(),
   colorPaletteReverse: z.boolean(),
+}
+
+export const RadialConfigObj = {
+  innerRadius: z.number().describe('The inner radius of the track'),
+  outerRadius: z.number().describe('The outer radius of the track'),
+}
+
+export const ValueConfigObj = {
+  min: z.number().describe('The minimum value of the track'),
+  max: z.number().describe('The maximum value of the track'),
+  logScale: z.boolean().default(false).describe('Whether to use log scale on axis'),
+  logScaleBase: z.enum(['2', '10']).default('10'),
+}
+
+export const CommonConfigObj = {
+  // zIndex: z.boolean(),
+  opacity: z.number().min(0).max(1).default(1).describe('The opacity of the track'),
+  // tooltipContent: z.string().optional(),
+  // events: z.record(z.unknown()),
+}
+
+export const LineConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
+  direction: z.enum(['in', 'out']).default('out').describe('The direction of the line'),
+  color: hexColor.describe('The color of the line'),
+  fill: z.boolean().describe('Whether to fill the line'),
+  fillColor: z.string().describe('The color of the fill'),
+  thickness: z.number().describe('The thickness of the line'),
+  // maxGap: z.unknown(),
+  // backgrounds: z.array(z.unknown()).optional(),
 })
 
-export const RadialConfig = z.object({
-  innerRadius: z.number(),
-  outerRadius: z.number(),
-})
-
-export const ValueConfig = z.object({
-  min: z.unknown(),
-  max: z.unknown(),
-  logScale: z.boolean().default(false),
-  logScaleBase: z.literal(2).or(z.literal(10)).default(10),
-})
-
-export const CommonConfig = z.object({
-  zIndex: z.boolean(),
-  opacity: z.number().min(0).max(1).default(1),
-  tooltipContent: z.string().optional(),
-  events: z.record(z.unknown()),
-}).passthrough()
-
-export const LineConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(ValueConfig).and(z.object({
-  direction: z.enum(['in', 'out']).default('out'),
-  color: hexColor,
-  fill: z.boolean(),
-  fillColor: z.string(),
-  thickness: z.number(),
-  maxGap: z.unknown(),
-  backgrounds: z.array(z.unknown()),
-}))
-
-export const ScatterConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(ValueConfig).and(z.object({
+export const ScatterConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   direction: z.enum(['in', 'out']).default('out'),
   color: hexColor,
   fill: z.boolean(),
@@ -105,32 +105,32 @@ export const ScatterConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(
   strokeColor: hexColor,
   strokeWidth: z.number(),
   backgrounds: z.array(z.unknown()),
-}))
+})
 
-export const HistogramConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(ValueConfig).and(z.object({
+export const HistogramConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   direction: z.enum(['in', 'out']).default('out'),
   color: hexColor,
   fill: z.boolean(),
   backgrounds: z.array(z.unknown()),
-}))
+})
 
-export const HeatmapConfig = RadialConfig.and(CommonConfig).and(ValueConfig).and(z.object({
+export const HeatmapConfig = z.object(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   color: hexColor,
   backgrounds: z.array(z.unknown()),
-}))
+})
 
-export const ChordConfig = CommonConfig.and(ValueConfig).and(z.object({
+export const ChordConfig = z.object(CommonConfigObj).extend(ValueConfigObj).extend({
   color: hexColor,
   radius: z.number(),
-}))
+})
 
-export const HighlightConfig = CommonConfig.and(RadialConfig).and(z.object({
+export const HighlightConfig = z.object(CommonConfigObj).extend(RadialConfigObj).extend({
   color: hexColor,
   strokeColor: hexColor,
   strokeWidth: z.number(),
-}))
+})
 
-export const StackConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(ValueConfig).and(z.object({
+export const StackConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   color: hexColor,
   direction: z.enum(['in', 'out', 'center']).default('out'),
   thickness: z.number(),
@@ -138,7 +138,7 @@ export const StackConfig = AxesConfig.and(RadialConfig).and(CommonConfig).and(Va
   margin: z.number(),
   stokeColor: hexColor,
   strokeWidth: z.number(),
-}))
+})
 
 // circos.d.ts
 export const LabelConfig = z.object({

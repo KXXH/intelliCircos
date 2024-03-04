@@ -2,16 +2,21 @@ import type { MaybeElementRef } from '@vueuse/core'
 import { unrefElement } from '@vueuse/core'
 import type { Ref } from 'vue'
 
+import type { z } from 'zod'
+import type { ChordData, EndpointData, GenomeData, HeatmapData, HighlightData, HistogramData, KaryotypeData, LineData, ScatterData, StackData, TextData } from 'circos/data'
+import type { HeatmapConfig, HighlightConfig, HistogramConfig, LineConfig, ScatterConfig } from '@/schema/circosSchema'
+
 // type MaybeSVGGraphicsElementRef = SVGGraphicsElement | Ref<SVGGraphicsElement | undefined>
 
 export type TrackId = string
 
 export interface ITrack {
-  r0: number
-  r1: number
+  // r0: number
+  // r1: number
   id?: TrackId
   type: string
-  background?: string
+  config: Partial< z.infer<typeof LineConfig> | z.infer<typeof ScatterConfig> | z.infer<typeof HistogramConfig> | z.infer<typeof HeatmapConfig> | z.infer<typeof HighlightConfig> | { color: (d: any) => string } & Record<string, any>>
+  data: Array<Record<string, any> & (GenomeData | ChordData | LineData | HeatmapData | StackData | TextData | HistogramData | HighlightData | ScatterData | KaryotypeData)>
   // onPointerEnter?: <T extends this>(track: T, event: PointerEvent) => void
   onPointerEnter?: (track: ITrack, event: PointerEvent) => void
   // onPointerLeave?: <T extends this>(track: T, event: PointerEvent) => void

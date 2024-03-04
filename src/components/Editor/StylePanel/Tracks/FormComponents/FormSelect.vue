@@ -27,17 +27,17 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <FormField v-slot="{ componentField }" :name="name">
+  <FormField v-slot="{ value, handleChange }" :name="name">
     <FormItem>
       <FormLabel>{{ label }}</FormLabel>
       <FormControl>
-        <Select v-bind="componentField" :disabled="disabled">
+        <Select :model-value="String(value)" :disabled="disabled" @update:model-value="handleChange">
           <SelectTrigger>
             <SelectValue :placeholder="placeholder" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem v-for="option in options" :key="option.value" :value="option.value">
+              <SelectItem v-for="option in options" :key="option.value" :value="String(option.value)">
                 {{ option.label ?? option.value }}
               </SelectItem>
             </SelectGroup>

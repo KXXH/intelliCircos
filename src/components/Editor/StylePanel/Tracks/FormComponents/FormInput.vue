@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { inject, provide } from 'vue'
+import { FormInjectKey } from '.'
 import {
   FormControl,
   FormDescription,
@@ -28,6 +30,7 @@ withDefaults(defineProps<{
       </FormControl>
       <FormDescription>
         {{ description }}
+        {{ JSON.stringify(componentField, null, 2) }}
       </FormDescription>
       <FormMessage />
     </FormItem>
