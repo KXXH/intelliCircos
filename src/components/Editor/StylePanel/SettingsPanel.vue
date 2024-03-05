@@ -18,7 +18,7 @@ const isOpen = defineModel({ default: false })
 <template>
   <Collapsible v-model:open="isOpen" class="w-full py-2 space-y-2">
     <div class="flex items-center justify-between px-4 space-x-4">
-      <h4 font-semibold>
+      <h4 font-semibold first-capitalize>
         {{ props.panelTitle }}
       </h4>
       <CollapsibleTrigger as-child>

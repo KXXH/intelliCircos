@@ -3,8 +3,9 @@ import { Form, useForm } from 'vee-validate'
 import { ZodBoolean, ZodEnum, ZodNumber, ZodString } from 'zod'
 import type { ZodObject, ZodTypeAny, z } from 'zod'
 import { cloneDeep, startCase } from 'lodash-es'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, toRaw, watch } from 'vue'
 import { toTypedSchema } from '@vee-validate/zod'
+import { watchPausable } from '@vueuse/core'
 import SettingsPanel from '../../SettingsPanel.vue'
 import FormNumber from './FormNumber.vue'
 import FormSlider from './FormSlider.vue'
@@ -15,24 +16,30 @@ import FormInput from './FormInput.vue'
 import DataSelect from './DataSelect.vue'
 import { FormFieldTypes, FormInjectKey } from './index'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   schema: T
   titleMap?: Record<string, string>
   typeMap?: Record<string, FormFieldTypes>
   optionBindings?: Record<string, Record<string, any>>
   formTitle: string
-}>()
+  showDataSelect?: boolean
+}>(), {
+  showDataSelect: true,
+})
+
+// Form and model value
 const modelVal = defineModel<z.infer<T>>({
   required: true,
 })
-// console.log('form setup before useForm', props.schema, JSON.stringify(modelVal.value, null, 2))
 const _form = useForm({
   validationSchema: toTypedSchema(props.schema),
   initialValues: modelVal as any,
 })
-
-const open = defineModel<boolean>('open', {
-  default: false,
+// watch(modelVal, () => {
+//   // _form.setValues(toRaw(modelVal))
+// })
+const { pause: pauseFormWatch, resume: resumeFormWatch } = watchPausable(_form.values, () => {
+  modelVal.value = toRaw(_form.values)
 })
 
 function getFieldType(schema: ZodObject<any, any, any>, key: string): FormFieldTypes {
@@ -68,16 +75,22 @@ const fieldTypes = computed(() => {
   return map
 })
 
+const open = defineModel<boolean>('open', {
+  default: false,
+})
 // fix for vee-validate to set field value to undefined issue
 let _savedFormVal = _form.values
 function onOpenStateChange(val: boolean) {
   if (!val) {
-    _savedFormVal = cloneDeep(_form.values)
+    _savedFormVal = cloneDeep(toRaw(_form.values))
+    pauseFormWatch()
   }
   else {
     nextTick(() => {
-      if (_form.values !== _savedFormVal)
+      if (_form.values !== _savedFormVal) {
         _form.setValues(_savedFormVal)
+        setTimeout(() => resumeFormWatch())
+      }
     })
   }
 }
@@ -87,7 +100,7 @@ const data = ref<string>('')
 
 <template>
   <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange">
-    <DataSelect v-model="data" />
+    <DataSelect v-if="props.showDataSelect" v-model="data" />
     <form space-y-3>
       <template v-for="key in Object.keys(props.schema.shape)" :key="key">
         <FormNumber v-if="fieldTypes[key] === FormFieldTypes.NUMBER" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />

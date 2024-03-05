@@ -88,9 +88,9 @@ export const CommonConfigObj = {
 
 export const LineConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   direction: z.enum(['in', 'out']).default('out').describe('The direction of the line'),
-  color: hexColor.describe('The color of the line'),
+  // color: hexColor.describe('The color of the line'),
   fill: z.boolean().describe('Whether to fill the line'),
-  fillColor: z.string().describe('The color of the fill'),
+  // fillColor: z.string().describe('The color of the fill'),
   thickness: z.number().describe('The thickness of the line'),
   // maxGap: z.unknown(),
   // backgrounds: z.array(z.unknown()).optional(),
@@ -98,24 +98,24 @@ export const LineConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend
 
 export const ScatterConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   direction: z.enum(['in', 'out']).default('out'),
-  color: hexColor,
+  // color: hexColor,
   fill: z.boolean(),
   size: z.number(),
   shape: z.string(),
-  strokeColor: hexColor,
+  // strokeColor: hexColor,
   strokeWidth: z.number(),
-  backgrounds: z.array(z.unknown()),
+  // backgrounds: z.array(z.unknown()),
 })
 
 export const HistogramConfig = z.object(AxesConfigObj).extend(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   direction: z.enum(['in', 'out']).default('out'),
-  color: hexColor,
+  // color: hexColor,
   fill: z.boolean(),
-  backgrounds: z.array(z.unknown()),
+  // backgrounds: z.array(z.unknown()),
 })
 
 export const HeatmapConfig = z.object(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
-  color: hexColor,
+  // color: hexColor,
   backgrounds: z.array(z.unknown()),
 })
 
@@ -125,8 +125,8 @@ export const ChordConfig = z.object(CommonConfigObj).extend(ValueConfigObj).exte
 })
 
 export const HighlightConfig = z.object(CommonConfigObj).extend(RadialConfigObj).extend({
-  color: hexColor,
-  strokeColor: hexColor,
+  // color: hexColor,
+  // strokeColor: hexColor,
   strokeWidth: z.number(),
 })
 

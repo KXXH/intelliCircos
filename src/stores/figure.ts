@@ -1,7 +1,8 @@
-import { ref } from 'vue'
+import { type MaybeRef, type Ref, ref, toRaw, toValue } from 'vue'
 import { csvParse } from 'd3'
 import { defineStore } from 'pinia'
-import type { EmptyTrack, ITrack, Track, TrackId } from '@/lib/circos'
+import type { DeepPartial } from 'utility-types'
+import type { EmptyTrack, ITrack, ITrackConfig, Track, TrackId } from '@/lib/circos'
 
 const width = 500
 const gieStainColor: Record<string, string> = {
@@ -187,5 +188,14 @@ export const useFigureStore = defineStore('figure', () => {
     },
   ])
   const renderedTracksMap = ref<Map<TrackId, SVGGraphicsElement>>(new Map())
-  return { tracks, renderedTracksMap }
+  const updateTrack = (id: string, opt: Ref<Partial<ITrackConfig>>) => {
+    const track = tracks.value.find(t => t.id === id)
+    if (track)
+      track.config = Object.assign({}, track.config, toRaw(opt))
+      // track.data = toRaw(opt).data ?? track.data
+      // track.type = toRaw(opt).type ?? track.type
+
+    // Object.assign(track, toRaw(opt))
+  }
+  return { tracks, updateTrack, renderedTracksMap }
 })
