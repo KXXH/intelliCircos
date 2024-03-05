@@ -2,10 +2,13 @@
 import { ref } from 'vue'
 import { FileUp } from 'lucide-vue-next'
 
+const emits = defineEmits<{
+  fileUploaded: [file: File]
+}>()
 const file = ref<HTMLInputElement | null>(null)
-
 function handleFileUpload() {
-  console.log(file.value?.files)
+  if (file.value?.files)
+    emits('fileUploaded', file.value.files[0])
 }
 </script>
 

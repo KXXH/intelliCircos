@@ -8,24 +8,38 @@ import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
 import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
 import { useFigureStore } from '@/stores/figure'
 import { Circos } from '@/lib/circosJS/dist/circos.module'
-import type { ITrack } from '@/lib/circos'
+import type { ITrack, RawCircosData } from '@/lib/circos'
+import { useDataStore } from '@/stores/data'
 
 // const { Circos } = circosJS
 const figure = useFigureStore()
+const dataStore = useDataStore()
+
 const el = ref<HTMLElement>()
 async function render(config: ITrack[]) {
   onMounted(() => {
     const circos = Circos({
       container: el.value,
     })
-    config.forEach((track) => {
+    config.forEach(async (track) => {
+      // get data
+      let data: RawCircosData = []
+      if (track.data) {
+        if (typeof track.data === 'string')
+          data = dataStore.files.find(file => file.name === track.data)?.content as RawCircosData
+        else if (track.data instanceof Function)
+          data = await track.data()
+        else
+          data = track.data
+      }
+
       if (track.type === 'layout') {
         // @ts-expect-error 先忽略掉TS错
-        circos.layout(track.data, track.config)
+        circos.layout(data, track.config)
       }
       else {
         // @ts-expect-error 先忽略掉TS错
-        circos[track.type](track.id, track.data, track.config)
+        circos[track.type](track.id, data, track.config)
       }
     })
     circos.render()

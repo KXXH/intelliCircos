@@ -16,12 +16,13 @@ const props = withDefaults(defineProps<{
 }>(), {
   isKaryotype: false,
 })
+const color = defineModel<string>('color')
 </script>
 
 <template>
   <li h-9 flex items-center gap-2 border rounded px-2>
     <Dna v-if="props.isKaryotype" class="h-4 w-4" />
-    <FileColorPick v-else class="cursor-pointer" />
+    <FileColorPick v-else v-model="color" class="cursor-pointer" />
     <pre>{{ props.filename }}</pre>
     <div flex-1 />
     <div flex>

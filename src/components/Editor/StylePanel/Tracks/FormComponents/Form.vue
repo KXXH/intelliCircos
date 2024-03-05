@@ -3,7 +3,7 @@ import { Form, useForm } from 'vee-validate'
 import { ZodBoolean, ZodEnum, ZodNumber, ZodString } from 'zod'
 import type { ZodObject, ZodTypeAny, z } from 'zod'
 import { cloneDeep, startCase } from 'lodash-es'
-import { computed, nextTick, provide } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import SettingsPanel from '../../SettingsPanel.vue'
 import FormNumber from './FormNumber.vue'
@@ -12,6 +12,7 @@ import FormSwitch from './FormSwitch.vue'
 import FormSelect from './FormSelect.vue'
 import FormColorPicker from './FormColorPicker.vue'
 import FormInput from './FormInput.vue'
+import DataSelect from './DataSelect.vue'
 import { FormFieldTypes, FormInjectKey } from './index'
 
 const props = defineProps<{
@@ -29,7 +30,6 @@ const _form = useForm({
   validationSchema: toTypedSchema(props.schema),
   initialValues: modelVal as any,
 })
-provide(FormInjectKey, _form)
 
 const open = defineModel<boolean>('open', {
   default: false,
@@ -81,10 +81,13 @@ function onOpenStateChange(val: boolean) {
     })
   }
 }
+
+const data = ref<string>('')
 </script>
 
 <template>
   <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange">
+    <DataSelect v-model="data" />
     <form space-y-3>
       <template v-for="key in Object.keys(props.schema.shape)" :key="key">
         <FormNumber v-if="fieldTypes[key] === FormFieldTypes.NUMBER" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />

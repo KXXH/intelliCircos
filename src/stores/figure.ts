@@ -3,50 +3,6 @@ import { csvParse } from 'd3'
 import { defineStore } from 'pinia'
 import type { EmptyTrack, ITrack, Track, TrackId } from '@/lib/circos'
 
-import GRCh37Raw from '@/lib/circosJS/demo/data/GRCh37.json'
-import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
-import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
-import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
-import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
-
-const GRCh37 = GRCh37Raw.filter((d) => {
-  return d.id === 'chr1' || d.id === 'chr2' || d.id === 'chr3'
-})
-const cytobands = csvParse(cytobandsRaw).filter((d) => {
-  return d.chrom === 'chr1' || d.chrom === 'chr2' || d.chrom === 'chr3'
-}).map((d) => {
-  return {
-    block_id: d.chrom,
-    start: Number.parseInt(d.chromStart),
-    end: Number.parseInt(d.chromEnd),
-    gieStain: d.gieStain,
-    name: d.name,
-  }
-})
-
-const snp250 = csvParse(snp250Raw).map((d) => {
-  return {
-    block_id: d.chromosome,
-    position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: +d.value,
-  }
-})
-
-const snp = csvParse(snpRaw).map((d) => {
-  return {
-    block_id: d.chromosome,
-    position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: +d.value,
-  }
-})
-const snp1m = csvParse(snp1mRaw).map((d) => {
-  return {
-    block_id: d.chromosome,
-    position: (Number.parseInt(d.start) + Number.parseInt(d.end)) / 2,
-    value: +d.value,
-  }
-})
-
 const width = 500
 const gieStainColor: Record<string, string> = {
   gpos100: 'rgb(0,0,0)',
@@ -72,7 +28,7 @@ export const useFigureStore = defineStore('figure', () => {
         labels: { display: false },
         ticks: { display: false },
       },
-      data: GRCh37,
+      data: 'GRCh37',
       type: 'layout',
       id: 'GRCh37',
     },
@@ -88,7 +44,7 @@ export const useFigureStore = defineStore('figure', () => {
           return d.name
         },
       },
-      data: cytobands,
+      data: 'cytobands',
       type: 'highlight',
       id: 'cytobands',
     },
@@ -123,7 +79,7 @@ export const useFigureStore = defineStore('figure', () => {
         ],
         tooltipContent: null,
       },
-      data: snp250,
+      data: 'snp250',
       type: 'line',
       id: 'snp-250',
     },
@@ -139,7 +95,7 @@ export const useFigureStore = defineStore('figure', () => {
           return `${d.block_id}:${Math.round(d.position)} ➤ ${d.value}`
         },
       },
-      data: snp250,
+      data: 'snp250',
       type: 'scatter',
       id: 'snp-250-tooltip',
     },
@@ -163,7 +119,7 @@ export const useFigureStore = defineStore('figure', () => {
         ],
         tooltipContent: null,
       },
-      data: snp,
+      data: 'snp',
       type: 'line',
       id: 'snp',
     },
@@ -177,7 +133,7 @@ export const useFigureStore = defineStore('figure', () => {
         color: '#f44336',
         tooltipContent: null,
       },
-      data: snp1m,
+      data: 'snp1m',
       type: 'line',
       id: 'snp1m',
     },
@@ -210,7 +166,7 @@ export const useFigureStore = defineStore('figure', () => {
         ],
         tooltipContent: null,
       },
-      data: snp,
+      data: 'snp',
       type: 'line',
       id: 'snp-in',
     },
@@ -225,7 +181,7 @@ export const useFigureStore = defineStore('figure', () => {
         color: '#f44336',
         tooltipContent: null,
       },
-      data: snp1m,
+      data: 'snp1m',
       type: 'line',
       id: 'snp1m-in',
     },
