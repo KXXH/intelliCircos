@@ -1,10 +1,10 @@
-import { type MaybeRef, type Ref, ref, toRaw, toValue } from 'vue'
+import { type MaybeRef, type Ref, computed, ref, toRaw } from 'vue'
 import { csvParse } from 'd3'
 import { defineStore } from 'pinia'
 import type { DeepPartial } from 'utility-types'
 import type { EmptyTrack, ITrack, ITrackConfig, Track, TrackId } from '@/lib/circos'
 
-const width = 500
+// const width = 500
 const gieStainColor: Record<string, string> = {
   gpos100: 'rgb(0,0,0)',
   gpos: 'rgb(0,0,0)',
@@ -21,11 +21,12 @@ const gieStainColor: Record<string, string> = {
 }
 
 export const useFigureStore = defineStore('figure', () => {
+  const width = ref(500)
   const tracks = ref<ITrack[]>([
     {
       config: {
-        innerRadius: width / 2 - 100,
-        outerRadius: width / 2 - 80,
+        innerRadius: width.value / 2 - 100,
+        outerRadius: width.value / 2 - 80,
         labels: { display: false },
         ticks: { display: false },
       },
@@ -35,8 +36,8 @@ export const useFigureStore = defineStore('figure', () => {
     },
     {
       config: {
-        innerRadius: width / 2 - 100,
-        outerRadius: width / 2 - 80,
+        innerRadius: width.value / 2 - 100,
+        outerRadius: width.value / 2 - 80,
         opacity: 0.3,
         color(d: any) {
           return gieStainColor[d.gieStain]
@@ -192,10 +193,13 @@ export const useFigureStore = defineStore('figure', () => {
     const track = tracks.value.find(t => t.id === id)
     if (track)
       track.config = Object.assign({}, track.config, toRaw(opt))
-      // track.data = toRaw(opt).data ?? track.data
-      // track.type = toRaw(opt).type ?? track.type
-
-    // Object.assign(track, toRaw(opt))
   }
-  return { tracks, updateTrack, renderedTracksMap }
+  const layout = computed(() => {
+    return tracks.value.find(t => t.type === 'layout')
+  })
+  const normalTracks = computed(() => {
+    return tracks.value.filter(t => t.type !== 'layout')
+  })
+
+  return { width, tracks, updateTrack, renderedTracksMap, layout, normalTracks }
 })

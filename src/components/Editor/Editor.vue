@@ -11,7 +11,7 @@ const layoutStore = useLayoutStore()
   <div class="relative h-full flex bg-background">
     <div class="relative h-full flex flex-[3] flex-col overflow-x-hidden">
       <CircosView />
-      <!-- <Explainer /> -->
+      <Explainer />
     </div>
     <!-- Sidebar -->
     <Transition

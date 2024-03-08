@@ -1,55 +1,84 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import { z } from 'zod'
+import { Plus } from 'lucide-vue-next'
 import SettingsPanel from './SettingsPanel.vue'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useFigureStore } from '@/stores/figure'
+
 import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { useSmartMerge } from '@/lib/circos/smartMerge'
 
 const isOpen = ref(true)
+const trackType = ref<string>()
+const { addPartialTrack } = useSmartMerge()
+const figrueStore = useFigureStore()
+function onTrackAdd() {
+  const innerRadius = figrueStore.layout?.config.innerRadius
+  const outerRadius = figrueStore.layout?.config.outerRadius
+  // emits
+  const track = addPartialTrack({
+    config: {},
+    type: trackType.value,
+  }, figrueStore.tracks, 'out', {
+    innerRadius: innerRadius ?? figrueStore.width,
+    outerRadius: outerRadius ?? figrueStore.width,
+  })
+  // reset
+  trackType.value = undefined
 
-const generalSettingSchema = toTypedSchema(z.object({
-  figureSize: z.number().min(0).max(100).default(50),
-}))
-
-const form = useForm({
-  validationSchema: generalSettingSchema,
-})
-
-const onSubmit = form.handleSubmit(() => {
-  // console.log('Form submitted!', values)
-})
+  // add track
+  figrueStore.tracks = track
+}
 </script>
 
 <template>
   <SettingsPanel v-model:open="isOpen" panel-title="General Settings">
-    <form class="space-y-2" @submit.prevent="onSubmit">
-      <FormField v-slot="{ componentField }" name="figureSize">
-        <FormItem>
-          <FormLabel>Figure Size</FormLabel>
-          <FormControl>
-            <Input v-bind="componentField" type="number" />
-          </FormControl>
-          <FormDescription>
-            The size of the figure in percentage
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      </FormField>
-      <Button type="submit" variant="default" size="sm" w-full space-x-2>
-        <span>
-          Add Track
-        </span>
-      </Button>
-    </form>
+    <div space="y-2" mb-3>
+      <div class="block text-left text-sm text-foreground font-medium tracking-tight">
+        Add a track
+      </div>
+      <div flex gap-2>
+        <Select v-model="trackType" class="flex-1">
+          <SelectTrigger>
+            <SelectValue placeholder="Select a figure" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="line">
+                Line
+              </SelectItem>
+              <SelectItem value="scatter">
+                Scatter
+              </SelectItem>
+              <SelectItem value="histogram">
+                Histogram
+              </SelectItem>
+              <SelectItem value="highlight">
+                Highlight
+              </SelectItem>
+              <SelectItem value="heatmap">
+                Heatmap
+              </SelectItem>
+              <SelectItem value="tile">
+                Tile
+              </SelectItem>
+              <SelectItem value="chord">
+                Chord
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <Button size="sm" class="text-sm" :disabled="!trackType" @click="onTrackAdd">
+          <Plus class="5 w-5" />
+        </Button>
+      </div>
+    </div>
   </SettingsPanel>
 </template>

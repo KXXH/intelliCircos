@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@dagrejs/graphlib':
+    specifier: ^2.1.13
+    version: 2.1.13
+  '@dagrejs/graphlib-dot':
+    specifier: ^1.0.2
+    version: 1.0.2
   '@langchain/core':
     specifier: ^0.1.34
     version: 0.1.34
@@ -17,6 +23,9 @@ dependencies:
   '@vee-validate/zod':
     specifier: ^4.12.4
     version: 4.12.4(vue@3.4.14)
+  '@viz-js/viz':
+    specifier: ^3.4.0
+    version: 3.4.0
   '@vueuse/core':
     specifier: ^10.7.2
     version: 10.7.2(vue@3.4.14)
@@ -568,6 +577,17 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+
+  /@dagrejs/graphlib-dot@1.0.2:
+    resolution: {integrity: sha512-H2AjTG449P9i62HKETdTB+DGmboJUK4LYh5YchYqxZ2iM4knQ420LWUDFL5LvCBVKuhqyuDW7qX9ngIZ8lUliA==}
+    dependencies:
+      '@dagrejs/graphlib': 2.1.13
+    dev: false
+
+  /@dagrejs/graphlib@2.1.13:
+    resolution: {integrity: sha512-calbMa7Gcyo+/t23XBaqQqon8LlgE9regey4UVoikoenKBXvUnCUL3s9RP6USCxttfr0XWVICtYUuKMdehKqMw==}
+    engines: {node: '>17.0.0'}
+    dev: false
 
   /@es-joy/jsdoccomment@0.41.0:
     resolution: {integrity: sha512-aKUhyn1QI5Ksbqcr3fFJj16p99QdjUxXAEuFst1Z47DRyoiMwivIH9MV/ARcJOCXVjPfjITciej8ZD2O/6qUmw==}
@@ -1979,6 +1999,10 @@ packages:
       vite: 5.0.11(@types/node@18.19.7)
       vue: 3.4.14(typescript@5.3.3)
     dev: true
+
+  /@viz-js/viz@3.4.0:
+    resolution: {integrity: sha512-9iXjMH9da+sfU3LhJ11X7n+HdhfwVa4R/AvhtSr6w9W1IGPDkeH+L+YHt5PLFRYcbWCviAg23Kicidc/qTdahw==}
+    dev: false
 
   /@volar/language-core@1.11.1:
     resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==}

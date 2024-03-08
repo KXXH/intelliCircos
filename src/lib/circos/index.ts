@@ -10,9 +10,9 @@ import type { HeatmapConfig, HighlightConfig, HistogramConfig, LineConfig, Scatt
 
 export type TrackId = string
 
-export type RawCircosData = Array<Record<string, any> & (GenomeData | ChordData | LineData | HeatmapData | StackData | TextData | HistogramData | HighlightData | ScatterData | KaryotypeData)>
+export type RawCircosData = Array<Record<string, any> | (GenomeData | ChordData | LineData | HeatmapData | StackData | TextData | HistogramData | HighlightData | ScatterData | KaryotypeData)>
 
-export type ITrackConfig = z.infer<typeof LineConfig> | z.infer<typeof ScatterConfig> | z.infer<typeof HistogramConfig> | z.infer<typeof HeatmapConfig> | z.infer<typeof HighlightConfig> | { color: (d: any) => string } & Record<string, any>
+export type ITrackConfig = z.infer<typeof LineConfig> | z.infer<typeof ScatterConfig> | z.infer<typeof HistogramConfig> | z.infer<typeof HeatmapConfig> | z.infer<typeof HighlightConfig> | { color: (((d: any) => string) | string) } & Record<string, any>
 export interface ITrack {
   // r0: number
   // r1: number

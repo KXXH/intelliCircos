@@ -13,7 +13,7 @@ const selectOpts = computed(() => {
 
 <template>
   <!-- Form Item -->
-  <div space="y-2">
+  <div space="y-2" mb-3>
     <!-- Form Label -->
     <div class="block text-left text-sm text-foreground font-medium tracking-tight">
       Data

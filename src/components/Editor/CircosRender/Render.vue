@@ -9,9 +9,9 @@ import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
 import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
 import { useFigureStore } from '@/stores/figure'
 
-import { Circos } from '@/lib/circosJS/dist/circos.module'
+// import { Circos } from '@/lib/circosJS/dist/circos.module'
 
-// import { Circos } from '@/lib/circosJS/src/circos'
+import { Circos } from '@/lib/circosJS/src/circos'
 import type { ITrack, RawCircosData } from '@/lib/circos'
 import { useDataStore } from '@/stores/data'
 
@@ -56,7 +56,7 @@ onMounted(() => {
   render(figure.tracks)
 })
 onMounted(() => {
-  watchDebounced(figure.tracks, () => {
+  watchDebounced(() => figure.tracks, () => {
     render(figure.tracks, true)
   }, {
     debounce: 100,
