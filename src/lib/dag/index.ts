@@ -1,8 +1,8 @@
 import { Graph, alg, json } from '@dagrejs/graphlib'
 import { chain, intersection, uniq } from 'lodash-es'
 import dot from '@dagrejs/graphlib-dot'
-import { string } from 'zod'
-import { color, interpolateGreys, interpolateRgb, scaleOrdinal, scaleSequential, schemeTableau10 } from 'd3'
+import { set, string } from 'zod'
+import { color, interpolateBlues, interpolateGreens, interpolateGreys, interpolateRgb, scaleOrdinal, scaleSequential, schemeTableau10 } from 'd3'
 
 const tracks = [
   '<ideogram><split><chord>',
@@ -168,11 +168,13 @@ export function simplifyGraph(G: Graph, root: string = '0', depth: number = 1) {
   return G
 }
 
-export function updateGraphWeight(g: Graph, paths: string[][], root = '0'): Graph {
+export function updateGraphWeight(g: Graph, paths: string[][], commendPaths: string[][], currentPath: string[][], root = '0'): Graph {
   const gCopy = _copy(g)
   const prefixDict: Record<string, number[]> = {}
-  for (let i = 0; i < paths.length; i++) {
-    const _path = ['START', ...paths[i], 'END']
+
+  const mergePaths = [...paths, ...commendPaths, ...currentPath]
+  for (let i = 0; i < mergePaths.length; i++) {
+    const _path = ['START', ...mergePaths[i], 'END']
     for (let j = 0; j < _path.length; j++) {
       const prefix = _path.slice(0, j + 1)
       const prefixKey = prefix.join(',')
@@ -183,6 +185,8 @@ export function updateGraphWeight(g: Graph, paths: string[][], root = '0'): Grap
     }
   }
 
+  // console.log('prefixDict', prefixDict)
+
   function dfs(node: string, prefix: string[]): void {
     prefix = [...prefix, node]
     if (node !== root) {
@@ -190,6 +194,10 @@ export function updateGraphWeight(g: Graph, paths: string[][], root = '0'): Grap
       const edge = gCopy.edge(lastNode, node)
       const prefixKey = prefix.map(x => gCopy.node(x).label).join(',')
       const weight = prefixDict[prefixKey]?.length || 0
+      const isEdgeCommend: boolean = gCopy.edge(lastNode, node)?.isCommend ?? false
+      const isEdgeCurrent: boolean = gCopy.edge(lastNode, node)?.isCurrent ?? false
+      const isCommend = prefixDict[prefixKey]?.some(value => value >= paths.length && value < paths.length + commendPaths.length) || isEdgeCommend
+      const isCurrent = prefixDict[prefixKey]?.some(value => value >= paths.length + commendPaths.length) || isEdgeCurrent
       let className = ''
 
       if (weight)
@@ -204,6 +212,8 @@ export function updateGraphWeight(g: Graph, paths: string[][], root = '0'): Grap
         {
           weight: (edge ? edge.weight : 0) + weight,
           class: `${edgeClass.trim()} ${className}`,
+          isCommend,
+          isCurrent,
         },
       )
     }
@@ -211,6 +221,11 @@ export function updateGraphWeight(g: Graph, paths: string[][], root = '0'): Grap
       dfs(child, prefix)
   }
   dfs(root, [])
+  // let allEdges = gCopy.edges(); // 获取所有边
+  // for (let edge of allEdges) {
+  //   let attrs = gCopy.edge(edge.v, edge.w); // 获取边的属性
+  //   console.log(`Edge from ${edge.v} to ${edge.w}:`, attrs);
+  // }
   return gCopy
 }
 
@@ -239,11 +254,15 @@ export function updateVisualAttributes(G: Graph, root: string = '0') {
   const max_weight = Math.max(...edge_weights)
   const min_weight = Math.min(...edge_weights) - 2
   const linearColorScale = scaleSequential(interpolateGreys).domain([min_weight, max_weight])
+  const recommendColorScale = scaleSequential(interpolateBlues).domain([min_weight, max_weight])
+  const currentColorScale = scaleSequential(interpolateGreens).domain([min_weight, max_weight])
   const linearScale = scaleSequential().domain([min_weight, max_weight]).range([0, 1])
   for (const edge of _G.edges()) {
     const weight = _G.edge(edge).weight
+    const isCommend = _G.edge(edge).isCommend
+    const isCurrent = _G.edge(edge).isCurrent
     _G.edge(edge).penwidth = 1 + 4 * linearScale(weight)
-    _G.edge(edge).color = color(linearColorScale(weight))?.formatHex()
+    _G.edge(edge).color = isCurrent ? color(currentColorScale(weight))?.formatHex() : isCommend ? color(recommendColorScale(weight))?.formatHex() : color(linearColorScale(weight))?.formatHex()
     _G.edge(edge).fontname = 'Helvetica'
     _G.edge(edge).label = weight
     _G.edge(edge).arrowhead = 'none'

@@ -18,12 +18,17 @@ const tracks = [
   '<ideogram><split><chord>',
   '<ideogram><split><chord>',
 ]
-// const recommendTracks: string[] = []
-// const currentTrack: string = ''
+const recommendTracks: string[] = [
+  '<scatter><split><ideogram><split><line><split><line>',
+  '<ideogram><split><heatmap><split><heatmap><split><chord>',
+]
+const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
 
 onMounted(() => {
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks)), (splitTracks(tracks))))
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph([...tracks, ...recommendTracks, ...currentTrack])), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
+  // console.log(splitTracks(tracks))
   const dotString = dot.write(graph)
+  // console.log('dotString', dotString) 
   instance().then((viz) => {
     const svg = viz.renderSVGElement(
       addGraphAttributes(dotString, {
@@ -67,7 +72,7 @@ onMounted(() => {
 </template>
 
 <style>
-.explainer-svg .node{
+.explainer-svg .node {
   transition: all 0.2s ease;
 }
 
@@ -75,9 +80,11 @@ onMounted(() => {
   0% {
     stop-color: red;
   }
+
   50% {
     stop-color: green;
   }
+
   100% {
     stop-color: blue;
   }
