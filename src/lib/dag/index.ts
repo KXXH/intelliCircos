@@ -254,8 +254,8 @@ export function updateVisualAttributes(G: Graph, root: string = '0') {
   const max_weight = Math.max(...edge_weights)
   const min_weight = Math.min(...edge_weights) - 2
   const linearColorScale = scaleSequential(interpolateGreys).domain([min_weight, max_weight])
-  const recommendColorScale = scaleSequential(interpolateBlues).domain([min_weight, max_weight])
-  const currentColorScale = scaleSequential(interpolateGreens).domain([min_weight, max_weight])
+  const recommendColorScale = scaleSequential(interpolateBlues).domain([min_weight-5, max_weight+5])
+  const currentColorScale = scaleSequential(interpolateGreens).domain([min_weight-5, max_weight+5])
   const linearScale = scaleSequential().domain([min_weight, max_weight]).range([0, 1])
   for (const edge of _G.edges()) {
     const weight = _G.edge(edge).weight
