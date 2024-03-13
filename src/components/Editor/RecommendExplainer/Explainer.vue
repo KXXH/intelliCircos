@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { instance } from '@viz-js/viz'
+
+// @ts-expect-error no types
 import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
@@ -28,7 +30,7 @@ onMounted(() => {
   const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph([...tracks, ...recommendTracks, ...currentTrack])), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
   // console.log(splitTracks(tracks))
   const dotString = dot.write(graph)
-  // console.log('dotString', dotString) 
+  // console.log('dotString', dotString)
   instance().then((viz) => {
     const svg = viz.renderSVGElement(
       addGraphAttributes(dotString, {

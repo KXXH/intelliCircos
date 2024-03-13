@@ -254,14 +254,14 @@ export function updateVisualAttributes(G: Graph, root: string = '0') {
   const max_weight = Math.max(...edge_weights)
   const min_weight = Math.min(...edge_weights) - 2
   const linearColorScale = scaleSequential(interpolateGreys).domain([min_weight, max_weight])
-  const recommendColorScale = scaleSequential(interpolateBlues).domain([min_weight-5, max_weight+5])
-  const currentColorScale = scaleSequential(interpolateGreens).domain([min_weight-5, max_weight+5])
+  const recommendColorScale = scaleSequential(interpolateBlues).domain([min_weight - 5, max_weight + 5])
+  const currentColorScale = scaleSequential(interpolateGreens).domain([min_weight - 5, max_weight + 5])
   const linearScale = scaleSequential().domain([min_weight, max_weight]).range([0, 1])
   for (const edge of _G.edges()) {
     const weight = _G.edge(edge).weight
     const isCommend = _G.edge(edge).isCommend
     const isCurrent = _G.edge(edge).isCurrent
-    _G.edge(edge).penwidth = 1 + 4 * linearScale(weight)
+    _G.edge(edge).penwidth = 1 + 5 * linearScale(weight)
     _G.edge(edge).color = isCurrent ? color(currentColorScale(weight))?.formatHex() : isCommend ? color(recommendColorScale(weight))?.formatHex() : color(linearColorScale(weight))?.formatHex()
     _G.edge(edge).fontname = 'Helvetica'
     _G.edge(edge).label = weight
