@@ -2,6 +2,7 @@
 import { Dna, Eye, X } from 'lucide-vue-next'
 import { withDefaults } from 'vue'
 import FileColorPick from './FileColorPick.vue'
+import DataViewDialog from './DataViewDialog.vue'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -26,9 +27,13 @@ const color = defineModel<string>('color')
     <pre>{{ props.filename }}</pre>
     <div flex-1 />
     <div flex>
-      <Button size="icon" variant="ghost" class="h-6 w-6 rounded-full">
-        <Eye class="h-4 w-4" />
-      </Button>
+      <DataViewDialog :title="props.filename" :filename="props.filename">
+        <template #trigger>
+          <Button size="icon" variant="ghost" class="h-6 w-6 rounded-full">
+            <Eye class="h-4 w-4" />
+          </Button>
+        </template>
+      </DataViewDialog>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>

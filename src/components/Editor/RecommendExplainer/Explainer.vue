@@ -27,7 +27,7 @@ const recommendTracks: string[] = [
 const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
 
 onMounted(() => {
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph([...tracks, ...recommendTracks, ...currentTrack])), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks, recommendTracks, currentTrack)), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
   // console.log(splitTracks(tracks))
   const dotString = dot.write(graph)
   // console.log('dotString', dotString)

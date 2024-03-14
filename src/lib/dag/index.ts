@@ -18,10 +18,10 @@ const tracks = [
   '<ideogram><split><chord>',
 ]
 
-export function buildNetwork(seqs: string[][]): Graph {
+export function buildNetwork(seqs: string[][], recommends: string[][], current: string[][]): Graph {
   const G = new Graph({ directed: true })
   // const step = 0
-  const vSeqs = seqs.map(seq => ['START', ...seq, 'END'])
+  const vSeqs = [...seqs.map(seq => ['START', ...seq, 'END']), ...recommends.map(seq => ['START', ...seq, 'END']), ...current.map(seq => ['START', ...seq])]
   let id = 1
   const maxStep = Math.max(...vSeqs.map(seq => seq.length))
   let lastStepMemo: { [key: string]: string } = {
@@ -56,9 +56,11 @@ export function splitTracks(tracks: string[]) {
   return tracks.map(track => track.match(re)).filter(Boolean).map(i => [...i!])
 }
 
-export function tracks2graph(tracks: string[]) {
+export function tracks2graph(tracks: string[], recommends: string[], current: string[]) {
   const splitedTracks = splitTracks(tracks)
-  return buildNetwork(splitedTracks)
+  const splitedRecommends = splitTracks(recommends)
+  const splitedCurrent = splitTracks(current)
+  return buildNetwork(splitedTracks, splitedRecommends, splitedCurrent)
 }
 
 function _copy(G: Graph) {
