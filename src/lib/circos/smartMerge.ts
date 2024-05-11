@@ -33,7 +33,8 @@ function fieldType(data: Record<string, any>[], field: string): FieldType {
   }
 }
 
-function pickAField(data: Record<string, any>[], expectedFieldType: FieldType, dropValue: boolean = false): [string, FieldType] {
+function pickAField(dataFile: CircosDataFile, expectedFieldType: FieldType, dropValue: boolean = false): [string, FieldType] {
+  const data = dataFile.content
   const fields = Object.keys(data[0])
   const fieldCandidates = fields.filter(f => fieldType(data, f) === expectedFieldType).filter(f => !dropValue || f !== 'value').filter(f => !isFunction(data[0][f]))
   if (fieldCandidates.includes('value'))
@@ -118,7 +119,7 @@ export function useSmartMerge() {
     layout: (size: {
       innerRadius: number
       outerRadius: number
-    }, data: Array<KaryotypeData & Record<string, any>>) => {
+    }, data: CircosDataFile) => {
       return {
         config: {
           innerRadius: size.innerRadius,
@@ -130,7 +131,7 @@ export function useSmartMerge() {
         type: 'layout',
       }
     },
-    highlight: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    highlight: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.categorical)
 
       const palette = generateRandomCategoryPalette()
@@ -153,7 +154,7 @@ export function useSmartMerge() {
         type: 'highlight',
       }
     },
-    line: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    line: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const useBackgroundColor = random(0, 1) > 0.8
       // const useAxes = random(0, 1) > 0.3
       const useAxes = true
@@ -178,11 +179,11 @@ export function useSmartMerge() {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const min = Math.min(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       const max = Math.max(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       return {
         config: {
@@ -199,16 +200,16 @@ export function useSmartMerge() {
         type: 'line',
       }
     },
-    scatter: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    scatter: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const palette = generateRandomCategoryPalette()
       const min = Math.min(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       const max = Math.max(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       // const useFill = random(0, 1) > 0.5
       const useFill = true
@@ -240,15 +241,15 @@ export function useSmartMerge() {
       }
     },
     // 随便写的，之后有空再补
-    histogram: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    histogram: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const min = Math.min(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       const max = Math.max(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       return {
         config: {
@@ -261,7 +262,7 @@ export function useSmartMerge() {
         type: 'histogram',
       }
     },
-    stack: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    stack: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       return {
         config: {
           innerRadius: size.innerRadius,
@@ -271,7 +272,7 @@ export function useSmartMerge() {
         type: 'stack',
       }
     },
-    text: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    text: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.categorical)
       return {
         config: {
@@ -283,15 +284,15 @@ export function useSmartMerge() {
         type: 'text',
       }
     },
-    heatmap: (size: { innerRadius: number, outerRadius: number }, data: Array<Record<string, any>>) => {
+    heatmap: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const min = Math.min(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       const max = Math.max(
         0,
-        ...data.map(d => Number(d[encodingField])),
+        ...data.content.map(d => Number(d[encodingField])),
       )
       return {
         config: {
@@ -352,7 +353,7 @@ export function useSmartMerge() {
       throw new Error('Invalid innerRadius or outerRadius')
   }
 
-  function smartMerge(partical_track: Partial<ITrack>, ctx: MaybeRef<ITrack[]>, direction: ('in' | 'out') = 'out', opts: { width?: number, innerRadius: number, outerRadius: number }) {
+  function smartMerge(partical_track: Partial<ITrack>, ctx: MaybeRef<ITrack[]>, direction: ('in' | 'out') = 'out', opts: { width?: number, innerRadius: number, outerRadius: number }): ITrack {
     if (partical_track.type === 'layout')
       checkValidLayout(partical_track, ctx)
 
@@ -389,11 +390,12 @@ export function useSmartMerge() {
         throw new Error('type not supported')
       if (type === 'layout') {
         data = dataStore.karyotypes.map(k => k.content)[0]
-        dataset = dataStore.karyotypes[0].content
+        // dataset = dataStore.karyotypes[0].content
       }
       else {
         const dataFuncs = DATA_TYPE[type]
-        dataset = sample(dataFuncs)!(dataStore.attachments).content
+        dataset = sample(dataFuncs)!(dataStore.attachments)
+        // dataset = sample(dataFuncs)!(dataStore.attachments).content
         // dataset = sample(dataStore.attachments)?.content
         if (!dataset)
           throw new Error('No dataset available')
@@ -416,7 +418,7 @@ export function useSmartMerge() {
       ...partical_track,
       type: partical_track.type!,
       id,
-      data: dataset!,
+      data: data!,
       config,
     }
   }

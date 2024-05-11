@@ -4,10 +4,12 @@ import Dashboard from './components/Dashboard.vue'
 import GuideOverlay from './components/Editor/GuideOverlay.vue'
 import { useInteractionStore } from './stores/interaction'
 import { TooltipProvider } from './components/ui/tooltip'
+import { initDemoData } from './lib/demo'
 import Header from '@/components/Header.vue'
 
 const interactionStore = useInteractionStore()
 const line = computed(() => interactionStore.lines?.[0])
+initDemoData()
 </script>
 
 <template>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { csvParse } from 'd3'
 import { onMounted, ref, watch } from 'vue'
-import { watchDebounced } from '@vueuse/core'
+import { watchDebounced, watchPausable } from '@vueuse/core'
+import _ from 'lodash-es'
 import GRCh37Raw from '@/lib/circosJS/demo/data/GRCh37.json'
 import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
 import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
@@ -24,6 +25,8 @@ let CircosInstance: ReturnType<typeof Circos> | undefined
 const el = ref<HTMLElement>()
 async function render(config: ITrack[], remove = false) {
   console.log('rendering')
+  if (!config || config.length === 0)
+    return
   if (!CircosInstance) {
     CircosInstance = Circos({
       container: el.value,
@@ -33,12 +36,13 @@ async function render(config: ITrack[], remove = false) {
     // get data
     let data: RawCircosData = []
     if (track.data) {
-      if (typeof track.data === 'string')
-        data = dataStore.files.find(file => file.name === track.data)?.content as RawCircosData
-      else if (track.data instanceof Function)
-        data = await track.data()
-      else
-        data = track.data
+      // if (typeof track.data === 'string')
+      //   data = dataStore.files.find(file => file.name === track.data)?.content as RawCircosData
+      // else if (track.data instanceof Function)
+      //   data = await track.data()
+      // else
+      //   data = track.data
+      data = track.data.content
     }
 
     if (track.type === 'layout') {
@@ -55,12 +59,22 @@ async function render(config: ITrack[], remove = false) {
 onMounted(() => {
   render(figure.tracks)
 })
+
 onMounted(() => {
-  watchDebounced(() => figure.tracks, () => {
-    render(figure.tracks, true)
+  const { pause: pauseFigureConfigWatch, resume: resumeFigureConfigWatch } = watchPausable(figure, () => {
+    pauseFigureConfigWatch()
+    render(_.cloneDeep(figure.tracks), true)
+    setTimeout(() => resumeFigureConfigWatch(), 0)
+    // resumeFigureConfigWatch()
   }, {
-    debounce: 100,
+    deep: true,
   })
+  // watchDebounced(() => figure.tracks, () => {
+  //   render(_.cloneDeep(figure.tracks), true)
+  // }, {
+  //   debounce: 100,
+  //   deep: true,
+  // })
 })
 </script>
 

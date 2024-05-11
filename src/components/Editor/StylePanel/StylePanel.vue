@@ -7,11 +7,15 @@ import { FormFieldTypes } from './Tracks/FormComponents'
 import { useFigureStore } from '@/stores/figure'
 import { HighlightConfig, LineConfig, ScatterConfig } from '@/schema/circosSchema'
 import type { ITrackConfig } from '@/lib/circos'
+import { useDataStore } from '@/stores/data'
+import { fixConfig } from '@/lib/circos/configFix'
 
 const figure = useFigureStore()
+const data = useDataStore()
 const formAttrs = computed(() => {
   return figure.tracks.map((track) => {
     const modelVal = track.config
+    const dataset = track.data
     // const modelVal = track.config
     const schema = {
       line: LineConfig,
@@ -57,6 +61,7 @@ const formAttrs = computed(() => {
     }
     return {
       schema,
+      dataset,
       modelVal,
       formTitle,
       typeMap,
@@ -66,63 +71,28 @@ const formAttrs = computed(() => {
   }).filter(attrs => attrs.schema)
 })
 
-// const lineConfigTest = ref<z.infer<typeof LineConfig> & Record<string, any>>({
-//   innerRadius: 0,
-//   outerRadius: 100,
-//   opacity: 1,
-//   min: 0,
-//   max: 100,
-//   logScale: false,
-//   logScaleBase: '10',
-//   direction: 'out',
-//   showAxesTooltip: true,
-//   color: '#000000',
-//   fillColor: '#000000',
-//   thickness: 1,
-//   fill: false,
-// })
+function onDatasetNameChange(id: string, newName: string) {
+  const newFileObj = data.files.find(v => v.name === newName)
+  if (!newFileObj)
+    return
+  figure.updateTrackData(id, newFileObj)
+}
+
+function onConfigChange(id: string, val: Partial<ITrackConfig>) {
+  figure.updateTrackConfig(id, fixConfig(val))
+}
 </script>
 
 <template>
   <div class="">
     <GeneralSettings />
-    <!-- <Form
-      v-model="lineConfigTest" :schema="LineConfig" form-title="Line" :type-map="{
-        color: FormFieldTypes.COLOR,
-        fillColor: FormFieldTypes.COLOR,
-        opacity: FormFieldTypes.SLIDER,
-      }" :option-bindings="{
-        logScaleBase: {
-          options: [
-            {
-              label: '2',
-              value: '2',
-            },
-            {
-              label: '10',
-              value: '10',
-            },
-          ],
-        },
-        direction: {
-          options: [
-            {
-              label: 'in',
-              value: 'in',
-            },
-            {
-              label: 'out',
-              value: 'out',
-            },
-          ],
-        },
-        opacity: {
-          min: 0,
-          max: 1,
-          step: 0.01,
-        },
+    <Form
+      v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" :form-title="attrs.formTitle" :type-map="attrs.typeMap" :option-bindings="attrs.optionBindings" :dataset="attrs.dataset.name"
+      @update:model-value="(val: Ref<Partial<ITrackConfig>>) => {
+        onConfigChange(attrs.id, toRaw(val))
+        // console.log('update', val)
       }"
-    /> -->
-    <Form v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" :form-title="attrs.formTitle" :type-map="attrs.typeMap" :option-bindings="attrs.optionBindings" @update:model-value="(val: Ref<Partial<ITrackConfig>>) => figure.updateTrack(attrs.id, toRaw(val))" />
+      @update:dataset="(val: string) => onDatasetNameChange(attrs.id, val)"
+    />
   </div>
 </template>

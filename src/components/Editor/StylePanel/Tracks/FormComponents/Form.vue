@@ -95,7 +95,7 @@ function onOpenStateChange(val: boolean) {
   }
 }
 
-const data = ref<string>('')
+const data = defineModel<string>('dataset') // data.name
 </script>
 
 <template>

@@ -12,6 +12,14 @@ export type TrackId = string
 
 export type RawCircosData = Array<Record<string, any> | (GenomeData | ChordData | LineData | HeatmapData | StackData | TextData | HistogramData | HighlightData | ScatterData | KaryotypeData)>
 
+export interface CircosDataFile {
+  filename: string
+  name: string
+  content: Record<string, any>[]
+  type: 'karyotype' | 'attachment'
+  color?: string
+}
+
 export type ITrackConfig = z.infer<typeof LineConfig> | z.infer<typeof ScatterConfig> | z.infer<typeof HistogramConfig> | z.infer<typeof HeatmapConfig> | z.infer<typeof HighlightConfig> | { color: (((d: any) => string) | string) } & Record<string, any>
 export interface ITrack {
   // r0: number
@@ -19,7 +27,8 @@ export interface ITrack {
   id: TrackId
   type: string
   config: Partial<ITrackConfig>
-  data: RawCircosData | (() => RawCircosData) | (() => Promise<RawCircosData>) | string
+  data: CircosDataFile
+  // data: RawCircosData | (() => RawCircosData) | (() => Promise<RawCircosData>) | string
   // onPointerEnter?: <T extends this>(track: T, event: PointerEvent) => void
   onPointerEnter?: (track: ITrack, event: PointerEvent) => void
   // onPointerLeave?: <T extends this>(track: T, event: PointerEvent) => void
