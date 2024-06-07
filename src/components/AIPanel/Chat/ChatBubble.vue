@@ -3,10 +3,13 @@ import { Code, Loader2, Paperclip, Play, RotateCw, View } from 'lucide-vue-next'
 import ChatBubbleAction from './ChatBubbleAction.vue'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/toast/use-toast'
 import type { Reference } from '@/lib/ai/client'
 import TooltipButton from '@/components/ui/tooltip-button/TooltipButton.vue'
+import { applyRecommendation } from '@/lib/ai/recommend'
+import { useFigureStore } from '@/stores/figure'
 
-defineProps<{
+const props = defineProps<{
   code?: string
   text: string
   role: 'user' | 'agent'
@@ -17,6 +20,26 @@ defineProps<{
 const emits = defineEmits<{
   reload: []
 }>()
+
+const { toast } = useToast()
+const figure = useFigureStore()
+
+function onRunCode() {
+  try {
+    applyRecommendation(figure.CTMLConfig, props.code!)
+    toast({
+      title: 'Code executed',
+      description: 'The code has been executed successfully',
+    })
+  }
+  catch (e: any) {
+    toast({
+      title: 'Failed to run code',
+      description: e.message,
+      variant: 'destructive',
+    })
+  }
+}
 </script>
 
 <template>
@@ -55,7 +78,7 @@ const emits = defineEmits<{
                     </template>
                   </TooltipButton>
                   <TooltipButton side="top" :side-offset="5" class="h-6 w-6 rounded-1" variant="secondary" size="icon">
-                    <Play class="h-4 w-4" />
+                    <Play class="h-4 w-4" @click="onRunCode" />
                     <template #hint>
                       <div text-xs>
                         Run code

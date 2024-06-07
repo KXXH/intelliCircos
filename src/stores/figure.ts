@@ -206,5 +206,28 @@ export const useFigureStore = defineStore('figure', () => {
     return tracks.value.filter(t => t.type !== 'layout')
   })
 
-  return { width, tracks, updateTrackConfig, updateTrackData, renderedTracksMap, layout, normalTracks }
+  const CTMLConfig = computed(() => {
+    const skeleton = tracks.value.map(t => ({
+      type: t.type,
+      innerRadius: t.config.innerRadius,
+      outerRadius: t.config.outerRadius,
+    })).sort((a, b) => a.innerRadius - b.innerRadius)
+
+    const CTMLTracks = []
+    let lastOuterRadius = 0
+    let tempTracks = ['']
+    for (const token of skeleton) {
+      if (token.innerRadius >= lastOuterRadius) {
+        CTMLTracks.push(tempTracks)
+        tempTracks = []
+      }
+      tempTracks.push(`<${token.type.replace('layout', 'ideogram')}>`)
+      lastOuterRadius = token.outerRadius
+    }
+    CTMLTracks.push(tempTracks)
+    CTMLTracks.push([''])
+    return `<START>${CTMLTracks.slice(1, -1).reverse().map(t => t.join('')).join('<split>')}<END>`
+  })
+
+  return { width, tracks, updateTrackConfig, updateTrackData, renderedTracksMap, layout, normalTracks, CTMLConfig }
 })

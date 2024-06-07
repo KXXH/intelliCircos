@@ -3,7 +3,6 @@ import ChatHeader from './ChatHeader.vue'
 import ChatTextArea from './ChatTextArea.vue'
 import ChatBubble from './ChatBubble.vue'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-
 import { useChat } from '@/lib/ai/client'
 
 const { messages, reloadMessage } = useChat()
@@ -14,6 +13,20 @@ messages.value = [
     role: 'agent',
     lastUpdated: Date.now(),
   },
+  // {
+  //   id: 0,
+  //   text: 'I need help with my code',
+  //   role: 'user',
+  //   lastUpdated: Date.now(),
+  // },
+  // {
+  //   id: 1,
+  //   text: 'Sure, please paste your code here',
+  //   role: 'agent',
+  //   lastUpdated: Date.now(),
+  //   code: '<start><highlight><ideogram><split><line><line><split><line><line><split><line><scatter><split><line><end>',
+  //   reference: [],
+  // },
 ]
 </script>
 

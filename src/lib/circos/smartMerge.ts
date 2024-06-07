@@ -1,5 +1,5 @@
 import type { KaryotypeData } from 'circos/data'
-import _, { has, isFunction, isNil, isNumber, isString, random, sample } from 'lodash-es'
+import _, { add, has, isFunction, isNil, isNumber, isString, random, sample } from 'lodash-es'
 import { type MaybeRef, unref } from 'vue'
 import { every, scaleLinear } from 'd3'
 import { isEmpty } from 'validator'
@@ -383,11 +383,11 @@ export function useSmartMerge() {
     let data, dataset
     if (!partical_track.data) {
       if (!partical_track.type)
-        throw new Error('type is required')
+        throw new Error('Type is required')
 
       const type = partical_track.type
       if (!DATA_TYPE[type])
-        throw new Error('type not supported')
+        throw new Error(`Type '${type}' not supported`)
       if (type === 'layout') {
         data = dataStore.karyotypes.map(k => k.content)[0]
         // dataset = dataStore.karyotypes[0].content
@@ -426,8 +426,11 @@ export function useSmartMerge() {
   function adjustRadius(old_tracks: ITrack[], new_track: ITrack, opts: { width?: number, innerRadius: number, outerRadius: number }) {
     // 只有在direction为out时才调整
     const tracks = normalizeRadius(old_tracks, opts)
+    // 找到已有track中最小的内半径
     const minOldInnerRadius = _.chain(tracks).filter(t => t.config?.innerRadius).map(t => t.config.innerRadius).min().value() ?? 0
+    // 找到已有track中最大的外半径
     const maxOldOutterRadius = _.chain(tracks).filter(t => t.config?.outerRadius).map(t => t.config.outerRadius).max().value() ?? opts.width ?? 0
+    // 新的外半径，要不是最大的外半径，要不是新track的外半径
     const maxNewOutterRadius = Math.max(
       maxOldOutterRadius,
       new_track.config.outerRadius,
@@ -451,13 +454,23 @@ export function useSmartMerge() {
     const new_track = smartMerge(partical_track, ctx, direction, opts)
     const new_tracks = adjustRadius(unref(ctx), new_track, opts)
     // figureStore.tracks = new_tracks
-    console.log('new track added, new track:', new_track)
-    console.log('new tracks:', new_tracks)
+    // console.log('new track added, new track:', new_track)
+    // console.log('new tracks:', new_tracks)
     return new_tracks
+  }
+
+  function addMultiplePartialTracks(partical_tracks: Partial<ITrack>[], ctx: MaybeRef<ITrack[]>, direction: ('in' | 'out') = 'out', opts: { width?: number, innerRadius: number, outerRadius: number }) {
+    const partical_tracks_config = partical_tracks.map(track => smartMerge(track, ctx, direction, opts))
+    let tracks = unref(ctx)
+    for (const track of partical_tracks_config)
+      tracks = adjustRadius(tracks, track, opts)
+
+    return tracks
   }
 
   return {
     smartMerge,
     addPartialTrack,
+    addMultiplePartialTracks,
   }
 }
