@@ -5,7 +5,7 @@ import GeneralSettings from './GeneralSettings.vue'
 import Form from './Tracks/FormComponents/Form.vue'
 import { FormFieldTypes } from './Tracks/FormComponents'
 import { useFigureStore } from '@/stores/figure'
-import { HighlightConfig, LineConfig, ScatterConfig } from '@/schema/circosSchema'
+import { HighlightConfig, LineConfig, ScatterConfig, HistogramConfig } from '@/schema/circosSchema'
 import type { ITrackConfig } from '@/lib/circos'
 import { useDataStore } from '@/stores/data'
 import { fixConfig } from '@/lib/circos/configFix'
@@ -13,6 +13,7 @@ import { fixConfig } from '@/lib/circos/configFix'
 const figure = useFigureStore()
 const data = useDataStore()
 const formAttrs = computed(() => {
+  console.log('formAttrs Change!')
   return figure.tracks.map((track) => {
     const modelVal = track.config
     const dataset = track.data
@@ -21,6 +22,7 @@ const formAttrs = computed(() => {
       line: LineConfig,
       scatter: ScatterConfig,
       highlight: HighlightConfig,
+      histogram: HistogramConfig,
     }[track.type]
     const formTitle = `${track.type} ${track.id}`
     const typeMap = {
@@ -87,10 +89,11 @@ function onConfigChange(id: string, val: Partial<ITrackConfig>) {
   <div class="">
     <GeneralSettings />
     <Form
-      v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" :form-title="attrs.formTitle" :type-map="attrs.typeMap" :option-bindings="attrs.optionBindings" :dataset="attrs.dataset.name"
+      v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" 
+      :form-title="attrs.formTitle" :type-map="attrs.typeMap" :option-bindings="attrs.optionBindings" :dataset="attrs.dataset.name"
       @update:model-value="(val: Ref<Partial<ITrackConfig>>) => {
         onConfigChange(attrs.id, toRaw(val))
-        // console.log('update', val)
+        // console.log('config change!')
       }"
       @update:dataset="(val: string) => onDatasetNameChange(attrs.id, val)"
     />

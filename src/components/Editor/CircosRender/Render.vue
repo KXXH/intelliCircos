@@ -2,7 +2,7 @@
 import { csvParse } from 'd3'
 import { onMounted, ref, watch } from 'vue'
 import { watchDebounced, watchPausable } from '@vueuse/core'
-import _ from 'lodash-es'
+import _, { before } from 'lodash-es'
 import GRCh37Raw from '@/lib/circosJS/demo/data/GRCh37.json'
 import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
 import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
@@ -44,7 +44,7 @@ async function render(config: ITrack[], remove = false) {
       //   data = track.data
       data = track.data.content
     }
-
+    // console.log(CircosInstance)
     if (track.type === 'layout') {
       // @ts-expect-error 先忽略掉TS错
       CircosInstance.layout(data, track.config)

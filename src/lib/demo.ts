@@ -8,6 +8,9 @@ import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
 import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
 import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
 import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
+import fusionGenesRaw from '@/lib/circosJS/demo/data/fusion-genes.csv?raw'
+import esRaw from '@/lib/circosJS/demo/data/es.csv?raw'
+// import ipsRaw from '@/lib/circosJS/demo/data/ips.csv?raw'
 
 export function initDemoData() {
   const GRCh37 = GRCh37Raw.filter((d) => {
@@ -24,7 +27,6 @@ export function initDemoData() {
       name: d.name,
     }
   })
-
   const snp250 = csvParse(snp250Raw).map((d) => {
     return {
       block_id: d.chromosome,
@@ -32,7 +34,6 @@ export function initDemoData() {
       value: +d.value,
     }
   })
-
   const snp = csvParse(snpRaw).map((d) => {
     return {
       block_id: d.chromosome,
@@ -47,6 +48,35 @@ export function initDemoData() {
       value: +d.value,
     }
   })
+  const fusionGenes = csvParse(fusionGenesRaw).filter((d) => {
+    return (d.source_id === 'chr1' || d.source_id === 'chr2' || d.source_id === 'chr3') && (d.target_id === 'chr1' || d.target_id === 'chr2' || d.target_id === 'chr3')
+  }).map(function (d) {
+    return {
+      source: {
+        id: d.source_id,
+        start: parseInt(d.source_breakpoint) - 2000000,
+        end: parseInt(d.source_breakpoint) + 2000000
+      },
+      target: {
+        id: d.target_id,
+        start: parseInt(d.target_breakpoint) - 2000000,
+        end: parseInt(d.target_breakpoint) + 2000000
+      }
+    }
+  })
+  const es = csvParse(esRaw).filter((d) => {
+    return d.chr === 'chr1' || d.chr === 'chr2' || d.chr === 'chr3'
+  }).map((d) => {
+    return {
+      block_id: d.chr,
+      start: d.start,
+      end: d.end,
+      value: Math.floor(Math.random() * 300) + 1,
+    }
+  })
+  // console.log(es)
+
+  
   onMounted(() => {
     const dataStore = useDataStore()
     const palette = generateCategorialPalette(undefined, true)
@@ -85,6 +115,21 @@ export function initDemoData() {
         type: 'attachment',
         color: palette.next().value!,
         content: snp1m,
+      },
+      {
+        filename: 'fusion-genes.csv',
+        name: 'fusion-genes',
+        type: 'attachment',
+        color: palette.next().value!,
+        content: fusionGenes,
+      },
+      {
+       
+       filename: 'es.csv',
+        name: 'es',
+        type: 'attachment',
+        color: palette.next().value!,
+        content: es,
       },
     ]
 

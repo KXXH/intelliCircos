@@ -69,8 +69,8 @@ function onTrackAdd() {
               <SelectItem value="tile">
                 Tile
               </SelectItem>
-              <SelectItem value="chord">
-                Chord
+              <SelectItem value="chords">
+                Chords
               </SelectItem>
             </SelectGroup>
           </SelectContent>

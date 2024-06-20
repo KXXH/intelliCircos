@@ -93,7 +93,8 @@ function pickATextDataset(files: CircosDataFile[]) {
 }
 
 function pickAChordDataset(files: CircosDataFile[]) {
-  return sample(files.filter(f => has(f.content[0], 'start') && has(f.content[0], 'end')))
+  // return sample(files.filter(f => has(f.content[0], 'start') && has(f.content[0], 'end')))
+  return sample(files.filter(f => has(f.content[0], 'source') && has(f.content[0], 'target')))
 }
 
 function pickACategoricalDataset(files: CircosDataFile[]) {
@@ -219,7 +220,7 @@ export function useSmartMerge() {
       const values = _.chain(data).map(fillField).uniq().value()
       const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
       const fillColor = (d: any) => {
-        console.log('fillColor', d, d[fillField])
+        // console.log('fillColor', d, d[fillField])
         return useStaticFill || !fillField ? '#f44336' : colorMap[d[fillField]]
       }
       return {
@@ -254,9 +255,9 @@ export function useSmartMerge() {
       return {
         config: {
           innerRadius: size.innerRadius,
-          outerRadius: size.outerRadius,
-          min,
-          max,
+          outerRadius: size.outerRadius + 1,
+          // min,
+          // max,
         },
         data,
         type: 'histogram',
@@ -305,6 +306,19 @@ export function useSmartMerge() {
         type: 'heatmap',
       }
     },
+    // 单加chords不行，但是再后面加line就能显示
+    chords: (data: CircosDataFile) => {
+      return {
+        config: {
+          radius: 0.5,
+          logScale: true,
+          opacity: 0.8,
+          color: '#ff5722',
+        },
+        data,
+        type: 'chords',
+      }
+    }
   }
 
   const DATA_TYPE: { [key: string]: Function[] } = {
@@ -316,6 +330,7 @@ export function useSmartMerge() {
     heatmap: [pickARangeDataset],
     stack: [pickACategoricalDataset],
     histogram: [pickARangeDataset],
+    chords: [pickAChordDataset],
   }
 
   function normalizeRadius(tracks: ITrack[], layout: { innerRadius: number, outerRadius: number }) {
@@ -395,6 +410,7 @@ export function useSmartMerge() {
       else {
         const dataFuncs = DATA_TYPE[type]
         dataset = sample(dataFuncs)!(dataStore.attachments)
+        // console.log(dataset)
         // dataset = sample(dataFuncs)!(dataStore.attachments).content
         // dataset = sample(dataStore.attachments)?.content
         if (!dataset)
@@ -454,8 +470,8 @@ export function useSmartMerge() {
     const new_track = smartMerge(partical_track, ctx, direction, opts)
     const new_tracks = adjustRadius(unref(ctx), new_track, opts)
     // figureStore.tracks = new_tracks
-    // console.log('new track added, new track:', new_track)
-    // console.log('new tracks:', new_tracks)
+    console.log('new track added, new track:', new_track)
+    console.log('new tracks:', new_tracks)
     return new_tracks
   }
 
