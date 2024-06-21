@@ -5,7 +5,7 @@ import GeneralSettings from './GeneralSettings.vue'
 import Form from './Tracks/FormComponents/Form.vue'
 import { FormFieldTypes } from './Tracks/FormComponents'
 import { useFigureStore } from '@/stores/figure'
-import { HighlightConfig, LineConfig, ScatterConfig, HistogramConfig } from '@/schema/circosSchema'
+import { HighlightConfig, LineConfig, ScatterConfig, HistogramConfig, ChordConfig, HeatmapConfig, StackConfig } from '@/schema/circosSchema'
 import type { ITrackConfig } from '@/lib/circos'
 import { useDataStore } from '@/stores/data'
 import { fixConfig } from '@/lib/circos/configFix'
@@ -23,6 +23,9 @@ const formAttrs = computed(() => {
       scatter: ScatterConfig,
       highlight: HighlightConfig,
       histogram: HistogramConfig,
+      chords: ChordConfig,
+      heatmap: HeatmapConfig,
+      stack: StackConfig,
     }[track.type]
     const formTitle = `${track.type} ${track.id}`
     const typeMap = {

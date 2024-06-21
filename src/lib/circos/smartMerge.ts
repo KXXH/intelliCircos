@@ -3,7 +3,7 @@ import _, { add, has, isFunction, isNil, isNumber, isString, random, sample } fr
 import { type MaybeRef, unref } from 'vue'
 import { every, scaleLinear } from 'd3'
 import { isEmpty } from 'validator'
-import { generateRandomCategoryPalette } from '../palette'
+import { generateRandomCategoryPalette, gieStainColor} from '../palette'
 import type { ITrack } from '.'
 import { type CircosDataFile, useDataStore } from '@/stores/data'
 
@@ -98,7 +98,8 @@ function pickAChordDataset(files: CircosDataFile[]) {
 }
 
 function pickACategoricalDataset(files: CircosDataFile[]) {
-  return sample(files.filter(f => validPositionalData(f.content) && isString(f.content[0].value)))
+  // return sample(files.filter(f => validPositionalData(f.content) && isString(f.content[0].value)))
+  return sample(files.filter(f => has(f.content[0], 'block_id') && has(f.content[0], 'start') && has(f.content[0], 'end')))
 }
 
 let _id = 0
@@ -125,7 +126,7 @@ export function useSmartMerge() {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
-          labels: { display: false },
+          labels: { radialOffset: 100 },
           ticks: { display: false },
         },
         data,
@@ -135,17 +136,17 @@ export function useSmartMerge() {
     highlight: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.categorical)
 
-      const palette = generateRandomCategoryPalette()
-      const values = _.chain(data).map(encodingField).uniq().value()
-      const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
-
+      // const palette = generateRandomCategoryPalette()
+      // const values = _.chain(data).map(encodingField).uniq().value()
+      // const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
       return {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
           opacity: 0.3,
-          color(d: any) {
-            return colorMap[d.gieStain]
+          // 颜色目前写死了
+          color: function(d: any) {
+            return gieStainColor[d.gieStain]
           },
           tooltipContent(d: any) {
             return d?.name
@@ -241,7 +242,6 @@ export function useSmartMerge() {
         type: 'scatter',
       }
     },
-    // 随便写的，之后有空再补
     histogram: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const min = Math.min(
@@ -255,9 +255,10 @@ export function useSmartMerge() {
       return {
         config: {
           innerRadius: size.innerRadius,
-          outerRadius: size.outerRadius + 1,
-          // min,
-          // max,
+          outerRadius: size.outerRadius,
+          color: '#222222',
+          min,
+          max,
         },
         data,
         type: 'histogram',
@@ -268,6 +269,20 @@ export function useSmartMerge() {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
+          thickness: 4,
+          margin: 0.01 * length,
+          strokeWidth: 0,
+          color: function (d: any) {
+            if (d.end - d.start > 3000000) {
+              return 'green'
+            } else if (d.end - d.start > 1500000) {
+              return 'red'
+            } else if (d.end - d.start > 1000000) {
+              return 'yellow'
+            } else if (d.end - d.start > 700000) {
+              return 'blue'
+            }
+          },
         },
         data,
         type: 'stack',
@@ -306,16 +321,17 @@ export function useSmartMerge() {
         type: 'heatmap',
       }
     },
-    // 单加chords不行，但是再后面加line就能显示
-    chords: (data: CircosDataFile) => {
+    chords: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       return {
         config: {
+          innerRadius: size.innerRadius,
+          outerRadius: size.outerRadius,
           radius: 0.5,
           logScale: true,
           opacity: 0.8,
           color: '#ff5722',
         },
-        data,
+        data, 
         type: 'chords',
       }
     }
@@ -410,7 +426,7 @@ export function useSmartMerge() {
       else {
         const dataFuncs = DATA_TYPE[type]
         dataset = sample(dataFuncs)!(dataStore.attachments)
-        // console.log(dataset)
+        console.log(dataset)
         // dataset = sample(dataFuncs)!(dataStore.attachments).content
         // dataset = sample(dataStore.attachments)?.content
         if (!dataset)
@@ -470,8 +486,8 @@ export function useSmartMerge() {
     const new_track = smartMerge(partical_track, ctx, direction, opts)
     const new_tracks = adjustRadius(unref(ctx), new_track, opts)
     // figureStore.tracks = new_tracks
-    console.log('new track added, new track:', new_track)
-    console.log('new tracks:', new_tracks)
+    // console.log('new track added, new track:', new_track)
+    // console.log('new tracks:', new_tracks)
     return new_tracks
   }
 

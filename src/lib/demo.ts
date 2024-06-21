@@ -10,6 +10,7 @@ import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
 import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
 import fusionGenesRaw from '@/lib/circosJS/demo/data/fusion-genes.csv?raw'
 import esRaw from '@/lib/circosJS/demo/data/es.csv?raw'
+import segdupRaw from '@/lib/circosJS/demo/data/segdup.csv?raw'
 // import ipsRaw from '@/lib/circosJS/demo/data/ips.csv?raw'
 
 export function initDemoData() {
@@ -74,9 +75,19 @@ export function initDemoData() {
       value: Math.floor(Math.random() * 300) + 1,
     }
   })
-  // console.log(es)
+  const segdup = csvParse(segdupRaw).filter((d) => {
+    return d.chr === 'chr1' || d.chr === 'chr2' || d.chr === 'chr3'
+  }).filter(function(d) {
+    return d.end - d.start > 700000
+  }).map(function(d) {
+    return {
+      block_id: d.chr,
+      start: d.start,
+      end: d.end,
+    }
+  })
+  // console.log(segdup)
 
-  
   onMounted(() => {
     const dataStore = useDataStore()
     const palette = generateCategorialPalette(undefined, true)
@@ -124,12 +135,18 @@ export function initDemoData() {
         content: fusionGenes,
       },
       {
-       
        filename: 'es.csv',
         name: 'es',
         type: 'attachment',
         color: palette.next().value!,
         content: es,
+      },
+      {
+        filename: 'segdup.csv',
+         name: 'segdup',
+         type: 'attachment',
+         color: palette.next().value!,
+         content: segdup,
       },
     ]
 

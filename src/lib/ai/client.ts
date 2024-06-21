@@ -1,6 +1,5 @@
 import { RemoteRunnable } from '@langchain/core/runnables/remote'
-import { reactive, ref,
-} from 'vue'
+import { reactive, ref } from 'vue'
 import { AIMessage, HumanMessage } from '@langchain/core/messages'
 import type { AIMessageChunk, BaseMessage } from '@langchain/core/messages'
 import type { Document } from '@langchain/core/documents'
@@ -52,7 +51,7 @@ function formatAiMessage(message: Message): AIMessage {
 }
 
 export function useChat() {
-  let _id = 0
+  let _id =2
 
   const sendMessage = async (text: string) => {
     const messageId = _id++
@@ -75,6 +74,7 @@ export function useChat() {
       loading: true,
     })
 
+    // 这里是打字机效果的实现的位置吗？
     setTimeout(() => messages.value.push(aiMessage))
     const resStream = await remoteChain.stream({
       history: [

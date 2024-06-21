@@ -20,9 +20,7 @@ import { Chat } from '@/components/AIPanel/Chat'
       </TabsTrigger>
       <TabsTrigger value="password" class="space-x-1">
         <Wrench class="h-3 w-3" fill="var(----primary-foreground)" />
-        <span>
-          Advanced
-        </span>
+        <span>Advanced</span>
       </TabsTrigger>
     </TabsList>
     <TabsContent value="account" class="relative flex flex-1 flex-col overflow-hidden data-[state=inactive]:hidden">
