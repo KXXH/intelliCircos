@@ -36,6 +36,8 @@ function isCompatible(current: Array<Array<string>>, recommendation: Array<Array
 
 export function applyRecommendation(currentCTML: string, recommendation: string) {
   // const currentCTML = trackConfig2CTML(ctx)
+  console.log('currentCTML: ' + currentCTML)
+  console.log('recommendation: ' + recommendation)
   const { addPartialTrack, addMultiplePartialTracks } = useSmartMerge()
   const figureStore = useFigureStore()
   const currentTokens = currentCTML
@@ -54,6 +56,8 @@ export function applyRecommendation(currentCTML: string, recommendation: string)
         .filter(token => token.toUpperCase() !== 'START' && token.toUpperCase() !== 'END')
         .sort(),
     )
+  console.log('currentTokens: ' + currentTokens)
+  console.log('trackTokens: ' + trackTokens)
   // 二维字符串数组，每个元素是一个字符串数组，表示一个track中的轨道类型
   const newTokens = trackTokens.slice(currentTokens.length)
 

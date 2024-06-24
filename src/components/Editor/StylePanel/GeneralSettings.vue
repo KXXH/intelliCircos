@@ -69,7 +69,7 @@ function onTrackAdd() {
               <SelectItem value="stack">
                 Stack
               </SelectItem>
-              <SelectItem value="chords">
+              <SelectItem value="chord">
                 Chords
               </SelectItem>
             </SelectGroup>

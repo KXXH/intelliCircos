@@ -24,7 +24,7 @@ messages.value = [
     text: 'Sure, please paste your code here',
     role: 'agent',
     lastUpdated: Date.now(),
-    code: '<start><highlight><ideogram><split><line><line><split><line><line><split><line><scatter><split><line><end>',
+    code: '<start><highlight><ideogram><split><line><line><split><line><line><split><line><scatter><split><chord><end>',
     reference: [],
   },
 ]

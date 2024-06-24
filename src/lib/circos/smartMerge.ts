@@ -321,7 +321,7 @@ export function useSmartMerge() {
         type: 'heatmap',
       }
     },
-    chords: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
+    chord: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       return {
         config: {
           innerRadius: size.innerRadius,
@@ -346,7 +346,7 @@ export function useSmartMerge() {
     heatmap: [pickARangeDataset],
     stack: [pickACategoricalDataset],
     histogram: [pickARangeDataset],
-    chords: [pickAChordDataset],
+    chord: [pickAChordDataset],
   }
 
   function normalizeRadius(tracks: ITrack[], layout: { innerRadius: number, outerRadius: number }) {
@@ -486,8 +486,6 @@ export function useSmartMerge() {
     const new_track = smartMerge(partical_track, ctx, direction, opts)
     const new_tracks = adjustRadius(unref(ctx), new_track, opts)
     // figureStore.tracks = new_tracks
-    // console.log('new track added, new track:', new_track)
-    // console.log('new tracks:', new_tracks)
     return new_tracks
   }
 
@@ -496,7 +494,6 @@ export function useSmartMerge() {
     let tracks = unref(ctx)
     for (const track of partical_tracks_config)
       tracks = adjustRadius(tracks, track, opts)
-
     return tracks
   }
 

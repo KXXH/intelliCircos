@@ -23,7 +23,7 @@ const formAttrs = computed(() => {
       scatter: ScatterConfig,
       highlight: HighlightConfig,
       histogram: HistogramConfig,
-      chords: ChordConfig,
+      chord: ChordConfig,
       heatmap: HeatmapConfig,
       stack: StackConfig,
     }[track.type]

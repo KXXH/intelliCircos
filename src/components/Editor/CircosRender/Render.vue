@@ -50,8 +50,14 @@ async function render(config: ITrack[], remove = false) {
       CircosInstance.layout(data, track.config)
     }
     else {
-      // @ts-expect-error 先忽略掉TS错
-      CircosInstance[track.type](track.id, data, track.config)
+      if (track.type === 'chord') {
+        let chordsStr = 'chords' 
+        // @ts-expect-error 先忽略掉TS错
+        CircosInstance[chordsStr](track.id, data, track.config)
+      } else {
+        // @ts-expect-error 先忽略掉TS错
+        CircosInstance[track.type](track.id, data, track.config)
+      }
     }
   })
   CircosInstance.render([], remove)
