@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch, watchEffect } from 'vue'
 import { instance } from '@viz-js/viz'
+import { useFigureStore } from '@/stores/figure'
+import { useChat } from '@/lib/ai/client'
 
 // @ts-expect-error no types
 import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
 const el = ref<HTMLElement>()
+
 const tracks = [
   '<ideogram><split><chord>',
   '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
@@ -24,10 +27,50 @@ const recommendTracks: string[] = [
   '<scatter><split><ideogram><split><line><split><line>',
   '<ideogram><split><heatmap><split><heatmap><split><chord>',
 ]
-const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
+// const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
 
-onMounted(() => {
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks, recommendTracks, currentTrack)), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
+const url = 'http://localhost:8000'
+function calTracks(searchKeyword: string) {
+  let res
+  fetch(url + "/search?input=" + encodeURIComponent(searchKeyword))
+    .then(response => response.json())
+    .then(data => {
+        // 处理从后端返回的数据
+        console.log('conected sucess')     
+        res = data   
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+  return res
+}
+const { messages } = useChat()
+console.log(messages)
+// const recommendTracks: any = computed(() => {
+//   return messages[messages.length - 1].code.split('').slice(7, -5).join('')
+// })
+const figureStore = useFigureStore()
+const CTMLConfig: any = computed(() => {
+  return figureStore.CTMLConfig
+})
+const currentTrackStr: any = computed(() => {
+  // console.log(CTMLConfig.value.split('').slice(7, -5).join(''))
+  return CTMLConfig.value.split('').slice(7, -5).join('')
+})
+const currentTrack: any = computed(() => {
+  return [currentTrackStr.value]
+})
+// const tracks: any = computed(async () => {
+//   return calTracks(currentTrackStr.value)
+// })
+
+watchEffect(() => {
+  // let tracks = calTracks(currentTrack1[0])
+  // const currentTrack = [currentTrackStr.value]
+  // calTracks(currentTrack.value[0])
+  // let tracks = await calTracks(currentTrackStr)
+  // console.log('tv: ' + tracks.value)
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks, recommendTracks, currentTrack.value)), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack.value))))
   // console.log(splitTracks(tracks))
   const dotString = dot.write(graph)
   // console.log('dotString', dotString)
@@ -61,7 +104,11 @@ onMounted(() => {
       })
     })
     svg.classList.add('explainer-svg')
-
+    if (el.value) {
+      while (el.value.firstChild) {
+        el.value.firstChild.remove();
+      }
+    }
     el.value?.appendChild(svg)
   })
 })

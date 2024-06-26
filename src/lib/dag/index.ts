@@ -1,6 +1,6 @@
 import { Graph, alg, json } from '@dagrejs/graphlib'
 import { chain, intersection, uniq } from 'lodash-es'
-import dot from '@dagrejs/graphlib-dot'
+// import dot from '@dagrejs/graphlib-dot'
 import { set, string } from 'zod'
 import { color, interpolateBlues, interpolateGreens, interpolateGreys, interpolateRgb, scaleOrdinal, scaleSequential, schemeTableau10 } from 'd3'
 
@@ -53,6 +53,8 @@ export function buildNetwork(seqs: string[][], recommends: string[][], current: 
 
 export function splitTracks(tracks: string[]) {
   const re = /<\w+>/g
+  // console.log(tracks)
+  if (tracks === undefined) return []
   return tracks.map(track => track.match(re)).filter(Boolean).map(i => [...i!])
 }
 

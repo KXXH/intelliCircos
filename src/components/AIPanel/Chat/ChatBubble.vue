@@ -26,6 +26,8 @@ const figure = useFigureStore()
 
 function onRunCode() {
   try {
+    // console.log('当前配置:' + figure.CTMLConfig)
+    console.log('props.code!' + props.code!)
     applyRecommendation(figure.CTMLConfig, props.code!)
     toast({
       title: 'Code executed',
