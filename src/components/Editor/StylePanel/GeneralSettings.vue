@@ -22,7 +22,6 @@ const figrueStore = useFigureStore()
 function onTrackAdd() {
   const innerRadius = figrueStore.layout?.config.innerRadius
   const outerRadius = figrueStore.layout?.config.outerRadius
-  console.log('inner + outer:: ' + innerRadius + ' XXXXXX ' + outerRadius)
   // emits
   const track = addPartialTrack({
     config: {},

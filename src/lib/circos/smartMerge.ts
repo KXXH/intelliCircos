@@ -187,7 +187,6 @@ export function useSmartMerge() {
         0,
         ...data.content.map(d => Number(d[encodingField])),
       )
-      console.log('sizeout: ' + size.outerRadius)
       return {
         config: {
           innerRadius: size.innerRadius,
@@ -401,10 +400,8 @@ export function useSmartMerge() {
     const minInnerRadius = _.chain(tracks).filter(t => t.config?.innerRadius).map(t => t.config.innerRadius).min().value() ?? 0
     const maxOutterRadius = _.chain(tracks).filter(t => t.config?.outerRadius).map(t => t.config.outerRadius).max().value() ?? opts.width ?? 0
     const trackWidth = random(30, 50)
-    console.log('maxOutterRadius: ' + maxOutterRadius)
     const targetOuterRadius = direction === 'out' ? maxOutterRadius + trackWidth : minInnerRadius
     const targetInnerRadius = direction === 'out' ? targetOuterRadius - trackWidth : minInnerRadius - trackWidth
-    console.log('targetOuterRadius: ' + targetOuterRadius)
     const size = {
       innerRadius: targetInnerRadius,
       outerRadius: targetOuterRadius,
@@ -475,8 +472,6 @@ export function useSmartMerge() {
       new_track.config.innerRadius
     )
     const scale = scaleLinear().domain([minNewInnerRadius, maxNewOutterRadius]).range([minNewInnerRadius, maxNewOutterRadius])
-
-    console.log('scale:: ' + scale(new_track.config.innerRadius) + ' XXXXXXX ' + scale(new_track.config.outerRadius))
 
     return _.chain([
       ...tracks,
