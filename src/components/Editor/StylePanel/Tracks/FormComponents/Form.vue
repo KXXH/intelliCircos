@@ -99,7 +99,7 @@ const data = defineModel<string>('dataset') // data.name
 </script>
 
 <template>
-  <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange">
+  <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange" :is-title-change="true">
     <DataSelect v-if="props.showDataSelect" v-model="data" />
     <form space-y-3>
       <template v-for="key in Object.keys(props.schema.shape)" :key="key">
