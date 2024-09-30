@@ -13,7 +13,7 @@ import { fixConfig } from '@/lib/circos/configFix'
 const figure = useFigureStore()
 const data = useDataStore()
 const formAttrs = computed(() => {
-  console.log('formAttrs Change!')
+  // console.log('formAttrs Change!')
   return figure.tracks.map((track) => {
     const modelVal = track.config
     const dataset = track.data
