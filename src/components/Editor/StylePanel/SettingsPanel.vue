@@ -40,9 +40,7 @@ const changeEditStatus = () => {
       <input v-else class="font-semibold first-capitalize"
         ref="inputRef"
         v-model="editTitle"
-        @blur="changeEditStatus"
-        @keyup.enter="changeEditStatus"
-        @keyup.esc="changeEditStatus"
+        @blur="changeEditStatus()"
       />
       <CollapsibleTrigger as-child>
         <Button variant="ghost" size="sm" class="w-9 p-0">
