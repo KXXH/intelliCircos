@@ -226,7 +226,7 @@ export const useFigureStore = defineStore('figure', () => {
     }
     CTMLTracks.push(tempTracks)
     CTMLTracks.push([''])
-    return `<START>${CTMLTracks.slice(1, -1).reverse().map(t => t.join('')).join('<split>')}<END>`
+    return `<START>${CTMLTracks.slice(1, -1).map(t => t.join('')).reverse().join('<split>')}<END>`
   })
 
   return { width, tracks, updateTrackConfig, updateTrackData, renderedTracksMap, layout, normalTracks, CTMLConfig }

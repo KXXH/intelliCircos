@@ -74,7 +74,6 @@ export function useChat() {
       loading: true,
     })
 
-    // 这里是打字机效果的实现的位置吗？
     setTimeout(() => messages.value.push(aiMessage))
     const resStream = await remoteChain.stream({
       history: [

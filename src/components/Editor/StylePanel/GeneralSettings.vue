@@ -35,6 +35,8 @@ function onTrackAdd() {
 
   // add track
   figrueStore.tracks = track
+  console.log(figrueStore.tracks)
+  console.log(figrueStore.CTMLConfig)
 }
 </script>
 

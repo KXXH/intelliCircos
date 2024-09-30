@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, watch, watchEffect } from 'vue'
+import { onMounted, ref, computed, watch, watchEffect, reactive } from 'vue'
 import { instance } from '@viz-js/viz'
 import { useFigureStore } from '@/stores/figure'
 import { useChat } from '@/lib/ai/client'
@@ -10,67 +10,30 @@ import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGra
 
 const el = ref<HTMLElement>()
 
-const tracks = [
-  '<ideogram><split><chord>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><highlight><split><line><split><highlight><split><scatter>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>',
-  '<ideogram><split><highlight><split><chord>',
-  '<ideogram><split><chord>',
-  '<ideogram><split><chord>',
-]
-const recommendTracks: string[] = [
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-]
-// const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
-
 const url = 'http://localhost:8000'
-function calTracks(searchKeyword: string) {
-  let res
-  fetch(url + "/search?input=" + encodeURIComponent(searchKeyword))
-    .then(response => response.json())
-    .then(data => {
-        // 处理从后端返回的数据
-        console.log('conected sucess')     
-        res = data   
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
-  return res
-}
 const { messages } = useChat()
 console.log(messages)
-// const recommendTracks: any = computed(() => {
-//   return messages[messages.length - 1].code.split('').slice(7, -5).join('')
-// })
+const recommendTracks: string[] = [messages.value[messages.value.length - 1]?.code?.slice(7, -5) ?? '']
 const figureStore = useFigureStore()
-const CTMLConfig: any = computed(() => {
-  return figureStore.CTMLConfig
-})
-const currentTrackStr: any = computed(() => {
-  // console.log(CTMLConfig.value.split('').slice(7, -5).join(''))
-  return CTMLConfig.value.split('').slice(7, -5).join('')
-})
 const currentTrack: any = computed(() => {
-  return [currentTrackStr.value]
+  return [figureStore.CTMLConfig.slice(7, -5)]
 })
-// const tracks: any = computed(async () => {
-//   return calTracks(currentTrackStr.value)
-// })
+let tracks = ref<string[]>([])
+watch(currentTrack, async(newValue, oldValue) => {
+  try {
+    await fetch(url + '/search?input=' + encodeURIComponent(newValue.value))
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+        tracks.value = data
+      })
+  } catch(e) {
+    console.error('Error: ' + e)
+  }
+})
 
 watchEffect(() => {
-  // let tracks = calTracks(currentTrack1[0])
-  // const currentTrack = [currentTrackStr.value]
-  // calTracks(currentTrack.value[0])
-  // let tracks = await calTracks(currentTrackStr)
-  // console.log('tv: ' + tracks.value)
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks, recommendTracks, currentTrack.value)), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack.value))))
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks.value, recommendTracks, currentTrack.value)), (splitTracks(tracks.value)), (splitTracks(recommendTracks)), (splitTracks(currentTrack.value))))
   // console.log(splitTracks(tracks))
   const dotString = dot.write(graph)
   // console.log('dotString', dotString)
