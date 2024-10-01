@@ -13,20 +13,20 @@ messages.value = [
     role: 'agent',
     lastUpdated: Date.now(),
   },
-  {
-    id: 0,
-    text: 'I need help with my code',
-    role: 'user',
-    lastUpdated: Date.now(),
-  },
-  {
-    id: 1,
-    text: 'Sure, please paste your code here',
-    role: 'agent',
-    lastUpdated: Date.now(),
-    code: '<start><highlight><ideogram><split><line><line><split><line><line><split><line><scatter><split><chord><end>',
-    reference: [],
-  },
+  // {
+  //   id: 0,
+  //   text: 'I need help with my code',
+  //   role: 'user',
+  //   lastUpdated: Date.now(),
+  // },
+  // {
+  //   id: 1,
+  //   text: 'Sure, please paste your code here',
+  //   role: 'agent',
+  //   lastUpdated: Date.now(),
+  //   code: '<start><ideogram><split><highlight><split><line><line><split><line><line><split><line><scatter><split><chord><end>',
+  //   reference: [],
+  // },
 ]
 </script>
 

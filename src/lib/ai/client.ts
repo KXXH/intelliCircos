@@ -51,7 +51,7 @@ function formatAiMessage(message: Message): AIMessage {
 }
 
 export function useChat() {
-  let _id =2
+  let _id = 0
 
   const sendMessage = async (text: string) => {
     const messageId = _id++
@@ -74,7 +74,6 @@ export function useChat() {
       loading: true,
     })
 
-    setTimeout(() => messages.value.push(aiMessage))
     const resStream = await remoteChain.stream({
       history: [
         ...messages.value.map((m) => {
@@ -101,6 +100,8 @@ export function useChat() {
     }
 
     aiMessage.loading = false
+    // 这里即使是宏任务也只能放到最后，因为微任务队列不一定会全部收到，就会执行宏任务，导致 message 错误更新
+    setTimeout(() => messages.value.push(aiMessage), 0)
   }
 
   const reset = () => {

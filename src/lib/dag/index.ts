@@ -4,20 +4,6 @@ import { chain, intersection, uniq } from 'lodash-es'
 import { set, string } from 'zod'
 import { color, interpolateBlues, interpolateGreens, interpolateGreys, interpolateRgb, scaleOrdinal, scaleSequential, schemeTableau10 } from 'd3'
 
-const tracks = [
-  '<ideogram><split><chord>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><highlight><split><line><split><highlight><split><scatter>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>',
-  '<ideogram><split><highlight><split><chord>',
-  '<ideogram><split><chord>',
-  '<ideogram><split><chord>',
-]
-
 export function buildNetwork(seqs: string[][], recommends: string[][], current: string[][]): Graph {
   const G = new Graph({ directed: true })
   // const step = 0

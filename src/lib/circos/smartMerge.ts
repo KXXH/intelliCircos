@@ -426,7 +426,6 @@ export function useSmartMerge() {
       else {
         const dataFuncs = DATA_TYPE[type]
         dataset = sample(dataFuncs)!(dataStore.attachments)
-        console.log(dataset)
         // dataset = sample(dataFuncs)!(dataStore.attachments).content
         // dataset = sample(dataStore.attachments)?.content
         if (!dataset)

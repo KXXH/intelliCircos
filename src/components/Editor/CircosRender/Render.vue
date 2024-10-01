@@ -3,11 +3,6 @@ import { csvParse } from 'd3'
 import { onMounted, ref, watch } from 'vue'
 import { watchDebounced, watchPausable } from '@vueuse/core'
 import _, { before } from 'lodash-es'
-import GRCh37Raw from '@/lib/circosJS/demo/data/GRCh37.json'
-import cytobandsRaw from '@/lib/circosJS/demo/data/cytobands.csv?raw'
-import snp250Raw from '@/lib/circosJS/demo/data/snp.density.250kb.txt?raw'
-import snpRaw from '@/lib/circosJS/demo/data/snp.density.txt?raw'
-import snp1mRaw from '@/lib/circosJS/demo/data/snp.density.1mb.txt?raw'
 import { useFigureStore } from '@/stores/figure'
 
 import { Circos } from '@/lib/circosJS/dist/circos.module'
@@ -44,20 +39,16 @@ async function render(config: ITrack[], remove = false) {
       //   data = track.data
       data = track.data.content
     }
-    // console.log(CircosInstance)
     if (track.type === 'layout') {
       // @ts-expect-error 先忽略掉TS错
       CircosInstance.layout(data, track.config)
-    }
-    else {
-      if (track.type === 'chord') {
-        let chordsStr = 'chords' 
-        // @ts-expect-error 先忽略掉TS错
-        CircosInstance[chordsStr](track.id, data, track.config)
-      } else {
-        // @ts-expect-error 先忽略掉TS错
-        CircosInstance[track.type](track.id, data, track.config)
-      }
+    } else if (track.type === 'chord') {
+      let chordsStr = 'chords' 
+      // @ts-expect-error 先忽略掉TS错
+      CircosInstance[chordsStr](track.id, data, track.config)
+    } else {
+      // @ts-expect-error 先忽略掉TS错
+      CircosInstance[track.type](track.id, data, track.config)
     }
   })
   CircosInstance.render([], remove)

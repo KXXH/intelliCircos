@@ -9,22 +9,27 @@ import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
 const el = ref<HTMLElement>()
-
 const url = 'http://localhost:8000'
-const { messages } = useChat()
-console.log(messages)
-const recommendTracks: string[] = [messages.value[messages.value.length - 1]?.code?.slice(7, -5) ?? '']
+
 const figureStore = useFigureStore()
 const currentTrack: any = computed(() => {
   return [figureStore.CTMLConfig.slice(7, -5)]
 })
+const { messages } = useChat()
+const recommendTracks: any = computed(() => {
+  let old = recommendTracks.value ?? ['<ideagram>']
+  if (messages.value[messages.value.length - 1].code) {
+    return [messages.value[messages.value.length - 1]?.code]
+  } else {
+    return old
+  }
+})
 let tracks = ref<string[]>([])
 watch(currentTrack, async(newValue, oldValue) => {
   try {
-    await fetch(url + '/search?input=' + encodeURIComponent(newValue.value))
+    await fetch(url + '/search?input=' + encodeURIComponent(newValue[0]))
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
         tracks.value = data
       })
   } catch(e) {
@@ -33,10 +38,8 @@ watch(currentTrack, async(newValue, oldValue) => {
 })
 
 watchEffect(() => {
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks.value, recommendTracks, currentTrack.value)), (splitTracks(tracks.value)), (splitTracks(recommendTracks)), (splitTracks(currentTrack.value))))
-  // console.log(splitTracks(tracks))
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks.value, recommendTracks.value, currentTrack.value)), (splitTracks(tracks.value)), (splitTracks(recommendTracks.value)), (splitTracks(currentTrack.value))))
   const dotString = dot.write(graph)
-  // console.log('dotString', dotString)
   instance().then((viz) => {
     const svg = viz.renderSVGElement(
       addGraphAttributes(dotString, {
