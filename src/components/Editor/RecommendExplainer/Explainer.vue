@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, watch, watchEffect, reactive } from 'vue'
+import { onMounted, ref, computed, watch, watchEffect, reactive, type ComputedRef } from 'vue'
 import { instance } from '@viz-js/viz'
 import { useFigureStore } from '@/stores/figure'
 import { useChat } from '@/lib/ai/client'
@@ -9,17 +9,19 @@ import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
 const el = ref<HTMLElement>()
-const url = 'http://localhost:8000'
+// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
+// const apiBaseUrl = 'http://localhost:8000'
+const apiBaseUrl = 'https://developers.cloudflare.com/cloudflare-one/connections/connect-apps'
 
 const figureStore = useFigureStore()
-const currentTrack: any = computed(() => {
+const currentTrack = computed(() => {
   return [figureStore.CTMLConfig.slice(7, -5)]
 })
 const { messages } = useChat()
-const recommendTracks: any = computed(() => {
-  let old = recommendTracks.value ?? ['<ideagram>']
+const recommendTracks: ComputedRef<string[]> = computed(() => {
+  const old = recommendTracks.value ?? ['<ideagram>']
   if (messages.value[messages.value.length - 1].code) {
-    return [messages.value[messages.value.length - 1]?.code]
+    return [messages.value[messages.value.length - 1]?.code ?? '']
   } else {
     return old
   }
@@ -27,7 +29,7 @@ const recommendTracks: any = computed(() => {
 let tracks = ref<string[]>([])
 watch(currentTrack, async(newValue, oldValue) => {
   try {
-    await fetch(url + '/search?input=' + encodeURIComponent(newValue[0]))
+    await fetch(apiBaseUrl + '/search?input=' + encodeURIComponent(newValue[0]))
       .then(response => response.json())
       .then(data => {
         tracks.value = data

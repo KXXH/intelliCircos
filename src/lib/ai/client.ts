@@ -6,6 +6,7 @@ import type { Document } from '@langchain/core/documents'
 
 const remoteChain = new RemoteRunnable<ChatInput, RecommendationResult, any>({
   url: 'http://localhost:8000/recommend',
+  // url: `${import.meta.env.VITE_API_BASE_URL}/recommend`
 })
 
 export interface Reference {
