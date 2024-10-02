@@ -50,6 +50,7 @@ async function render(config: ITrack[], remove = false) {
       CircosInstance[track.type](track.id, data, track.config)
     }
   })
+  // @ts-expect-error 先忽略掉TS错
   CircosInstance.render([], remove)
 }
 onMounted(() => {

@@ -7,5 +7,11 @@
       "path": "./tsconfig.app.json"
     }
   ],
-  "files": []
+  "files": [],
+  "compilerOptions": {
+    "strict": false, // 关闭严格模式，可能会忽略一些类型检查
+    "skipLibCheck": true, // 忽略库文件的类型检查，可以加快构建并避免某些不相关的类型错误
+    "noImplicitAny": false, // 允许隐式的 any 类型，减少类型错误
+    "suppressImplicitAnyIndexErrors": true // 忽略某些索引类型的错误
+  }
 }

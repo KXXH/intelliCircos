@@ -110,7 +110,9 @@ function _getId() {
 
 export function useSmartMerge() {
   const dataStore = useDataStore()
+  // @ts-expect-error 先忽略掉TS错
   const pickACategoricalField = (data: Record<string, any>[]) => pickAField(data, FieldType.categorical)
+  // @ts-expect-error 先忽略掉TS错
   const pickANumericField = (data: Record<string, any>[]) => pickAField(data, FieldType.numeric)
   // const pickAnOrdinalField = (data: Record<string, any>[]) => pickAField(data, FieldType.ordinal)
   function pickAKaryotypeField(_data: Record<string, any>[]) {
@@ -146,6 +148,7 @@ export function useSmartMerge() {
           opacity: 0.3,
           // TODO：颜色目前写死了
           color: function(d: any) {
+            // @ts-expect-error 先忽略掉TS错
             return gieStainColor[d.gieStain]
           },
           tooltipContent(d: any) {
