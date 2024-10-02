@@ -11,7 +11,7 @@ import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGra
 const el = ref<HTMLElement>()
 // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 // const apiBaseUrl = 'http://localhost:8000'
-const apiBaseUrl = 'https://developers.cloudflare.com/cloudflare-one/connections/connect-apps'
+const apiBaseUrl = 'https://doubt-dvds-show-argument.trycloudflare.com'
 
 const figureStore = useFigureStore()
 const currentTrack = computed(() => {
