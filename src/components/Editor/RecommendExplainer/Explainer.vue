@@ -9,9 +9,8 @@ import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
 const el = ref<HTMLElement>()
-// const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
-// const apiBaseUrl = 'http://localhost:8000'
-const apiBaseUrl = 'https://doubt-dvds-show-argument.trycloudflare.com'
+const apiBaseUrl = 'http://localhost:8000'
+
 
 const figureStore = useFigureStore()
 const currentTrack = computed(() => {
