@@ -1,36 +1,46 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch, watchEffect, reactive, type ComputedRef } from 'vue'
 import { instance } from '@viz-js/viz'
+import { useFigureStore } from '@/stores/figure'
+import { useChat } from '@/lib/ai/client'
 
 // @ts-expect-error no types
 import dot from '@dagrejs/graphlib-dot'
 import { addGraphAttributes, simplifyGraph, splitTracks, tracks2graph, updateGraphWeight, updateVisualAttributes } from '@/lib/dag'
 
 const el = ref<HTMLElement>()
-const tracks = [
-  '<ideogram><split><chord>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><highlight><split><line><split><highlight><split><scatter>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>',
-  '<ideogram><split><highlight><split><chord>',
-  '<ideogram><split><chord>',
-  '<ideogram><split><chord>',
-]
-const recommendTracks: string[] = [
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-]
-const currentTrack: string[] = ['<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>']
+const apiBaseUrl = 'http://localhost:8000'
 
-onMounted(() => {
-  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks, recommendTracks, currentTrack)), (splitTracks(tracks)), (splitTracks(recommendTracks)), (splitTracks(currentTrack))))
-  // console.log(splitTracks(tracks))
+
+const figureStore = useFigureStore()
+const currentTrack = computed(() => {
+  return [figureStore.CTMLConfig.slice(7, -5)]
+})
+const { messages } = useChat()
+const recommendTracks: ComputedRef<string[]> = computed(() => {
+  const old = recommendTracks.value ?? ['<ideagram>']
+  if (messages.value[messages.value.length - 1].code) {
+    return [messages.value[messages.value.length - 1]?.code ?? '']
+  } else {
+    return old
+  }
+})
+let tracks = ref<string[]>([])
+watch(currentTrack, async(newValue, oldValue) => {
+  try {
+    await fetch(apiBaseUrl + '/search?input=' + encodeURIComponent(newValue[0]))
+      .then(response => response.json())
+      .then(data => {
+        tracks.value = data
+      })
+  } catch(e) {
+    console.error('Error: ' + e)
+  }
+})
+
+watchEffect(() => {
+  const graph = updateVisualAttributes(updateGraphWeight(simplifyGraph(tracks2graph(tracks.value, recommendTracks.value, currentTrack.value)), (splitTracks(tracks.value)), (splitTracks(recommendTracks.value)), (splitTracks(currentTrack.value))))
   const dotString = dot.write(graph)
-  // console.log('dotString', dotString)
   instance().then((viz) => {
     const svg = viz.renderSVGElement(
       addGraphAttributes(dotString, {
@@ -61,7 +71,11 @@ onMounted(() => {
       })
     })
     svg.classList.add('explainer-svg')
-
+    if (el.value) {
+      while (el.value.firstChild) {
+        el.value.firstChild.remove();
+      }
+    }
     el.value?.appendChild(svg)
   })
 })

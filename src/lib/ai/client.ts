@@ -1,6 +1,5 @@
 import { RemoteRunnable } from '@langchain/core/runnables/remote'
-import { reactive, ref,
-} from 'vue'
+import { reactive, ref } from 'vue'
 import { AIMessage, HumanMessage } from '@langchain/core/messages'
 import type { AIMessageChunk, BaseMessage } from '@langchain/core/messages'
 import type { Document } from '@langchain/core/documents'
@@ -75,7 +74,6 @@ export function useChat() {
       loading: true,
     })
 
-    setTimeout(() => messages.value.push(aiMessage))
     const resStream = await remoteChain.stream({
       history: [
         ...messages.value.map((m) => {
@@ -102,6 +100,8 @@ export function useChat() {
     }
 
     aiMessage.loading = false
+    // 这里即使是宏任务也只能放到最后，因为微任务队列不一定会全部收到，就会执行宏任务，导致 message 错误更新
+    setTimeout(() => messages.value.push(aiMessage), 0)
   }
 
   const reset = () => {

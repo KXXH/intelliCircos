@@ -1,22 +1,8 @@
 import { Graph, alg, json } from '@dagrejs/graphlib'
 import { chain, intersection, uniq } from 'lodash-es'
-import dot from '@dagrejs/graphlib-dot'
+// import dot from '@dagrejs/graphlib-dot'
 import { set, string } from 'zod'
 import { color, interpolateBlues, interpolateGreens, interpolateGreys, interpolateRgb, scaleOrdinal, scaleSequential, schemeTableau10 } from 'd3'
-
-const tracks = [
-  '<ideogram><split><chord>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<ideogram><split><highlight><split><highlight><split><highlight><split><highlight><split><highlight><split><line><split><line>',
-  '<scatter><split><ideogram><split><line><split><line>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><highlight><split><line><split><highlight><split><scatter>',
-  '<ideogram><split><heatmap><split><heatmap><split><chord>',
-  '<ideogram><split><histogram><split><histogram><split><histogram><split><histogram><split><chord>',
-  '<ideogram><split><highlight><split><chord>',
-  '<ideogram><split><chord>',
-  '<ideogram><split><chord>',
-]
 
 export function buildNetwork(seqs: string[][], recommends: string[][], current: string[][]): Graph {
   const G = new Graph({ directed: true })
@@ -53,6 +39,8 @@ export function buildNetwork(seqs: string[][], recommends: string[][], current: 
 
 export function splitTracks(tracks: string[]) {
   const re = /<\w+>/g
+  // console.log(tracks)
+  if (tracks === undefined) return []
   return tracks.map(track => track.match(re)).filter(Boolean).map(i => [...i!])
 }
 

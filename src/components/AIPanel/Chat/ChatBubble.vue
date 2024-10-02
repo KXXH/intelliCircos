@@ -26,6 +26,8 @@ const figure = useFigureStore()
 
 function onRunCode() {
   try {
+    // console.log('props.code!' + props.code!)
+    // 变量后面加感叹号在 TS 中表示 非空断言，不需要空值检查
     applyRecommendation(figure.CTMLConfig, props.code!)
     toast({
       title: 'Code executed',

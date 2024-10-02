@@ -28,7 +28,7 @@ const layoutStore = useLayoutStore()
 
       <Button variant="outline" size="icon" @click="() => layoutStore.toggleRightPanel()">
         <Transition
-          enter-active-class="transition duration-300 ease-in-out" enter-from-class="transform rotate-180"
+          enter-active-class=" duration-300 ease-in-out" enter-from-class="transform rotate-180"
           enter-to-class="transform rotate-0" mode="out-in"
         >
           <PanelRightClose v-if="layoutStore.rightPanelOpen" class="h-5 w-5" :stroke-width="2" />

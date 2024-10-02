@@ -36,8 +36,11 @@ function isCompatible(current: Array<Array<string>>, recommendation: Array<Array
 
 export function applyRecommendation(currentCTML: string, recommendation: string) {
   // const currentCTML = trackConfig2CTML(ctx)
+  // console.log('currentCTML: ' + currentCTML)
+  // console.log('recommendation: ' + recommendation)
   const { addPartialTrack, addMultiplePartialTracks } = useSmartMerge()
   const figureStore = useFigureStore()
+  // TODO【BUG 比较逻辑问题】当使用合成轨道时，例如推荐使用了两个，而当前只有一个轨道，则会不能推荐
   const currentTokens = currentCTML
     .split('<split>')
     .map(
@@ -54,14 +57,16 @@ export function applyRecommendation(currentCTML: string, recommendation: string)
         .filter(token => token.toUpperCase() !== 'START' && token.toUpperCase() !== 'END')
         .sort(),
     )
+  // console.log('currentTokens: ' + currentTokens)
+  // console.log('trackTokens: ' + trackTokens)
   // 二维字符串数组，每个元素是一个字符串数组，表示一个track中的轨道类型
   const newTokens = trackTokens.slice(currentTokens.length)
 
-  console.log(currentTokens, trackTokens, isCompatible(currentTokens, trackTokens), newTokens)
+  // console.log(currentTokens, trackTokens, isCompatible(currentTokens, trackTokens), newTokens)
   if (!isCompatible(currentTokens, trackTokens))
     throw new Error('This Recommendation is not compatible with the current configuration')
   for (const track of newTokens) {
-    console.log(`Adding track: ${track}`)
+    // console.log(`Adding track: ${track}`)
     if (track.length > 1) {
       const tracks = addMultiplePartialTracks(track.map(t => ({
         config: {},

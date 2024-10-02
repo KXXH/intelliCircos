@@ -39,7 +39,7 @@ function onTrackAdd() {
 </script>
 
 <template>
-  <SettingsPanel v-model:open="isOpen" panel-title="General Settings">
+  <SettingsPanel v-model:open="isOpen" panel-title="General Settings" :is-title-change="false">
     <div space="y-2" mb-3>
       <div class="block text-left text-sm text-foreground font-medium tracking-tight">
         Add a track
@@ -66,11 +66,11 @@ function onTrackAdd() {
               <SelectItem value="heatmap">
                 Heatmap
               </SelectItem>
-              <SelectItem value="tile">
-                Tile
+              <SelectItem value="stack">
+                Stack
               </SelectItem>
               <SelectItem value="chord">
-                Chord
+                Chords
               </SelectItem>
             </SelectGroup>
           </SelectContent>

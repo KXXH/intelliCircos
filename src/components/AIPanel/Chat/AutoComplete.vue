@@ -117,11 +117,11 @@ function send() {
     <div flex="~ row" relative h-80px items-center gap-1 border rounded-md>
       <textarea
         ref="input" v-model="value" h-full flex-1 resize-none
-        class="w-full flex rounded-md bg-transparent py-3 pl-3 pr-[50px] text-sm outline-none disabled:cursor-not-allowed placeholder:text-muted-foreground disabled:opacity-50"
+        class="w-full flex rounded-md bg-transparent py-3 pl-3 pr-[60px] text-sm outline-none disabled:cursor-not-allowed placeholder:text-muted-foreground disabled:opacity-50"
         @input="(payload) => update(payload as InputEvent)"
         @keydown="keydown"
       />
-      <Button size="icon" variant="default" absolute right-5>
+      <Button size="icon" variant="default" absolute right-3>
         <Send class="h-4 w-4" @click="send" />
       </Button>
     </div>

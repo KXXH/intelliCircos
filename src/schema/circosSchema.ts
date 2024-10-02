@@ -116,7 +116,7 @@ export const HistogramConfig = z.object(AxesConfigObj).extend(RadialConfigObj).e
 
 export const HeatmapConfig = z.object(RadialConfigObj).extend(CommonConfigObj).extend(ValueConfigObj).extend({
   // color: hexColor,
-  backgrounds: z.array(z.unknown()),
+  // backgrounds: z.array(z.unknown()),
 })
 
 export const ChordConfig = z.object(CommonConfigObj).extend(ValueConfigObj).extend({
@@ -136,7 +136,7 @@ export const StackConfig = z.object(AxesConfigObj).extend(RadialConfigObj).exten
   thickness: z.number(),
   radicalMargin: z.number(),
   margin: z.number(),
-  stokeColor: hexColor,
+  // stokeColor: hexColor,
   strokeWidth: z.number(),
 })
 

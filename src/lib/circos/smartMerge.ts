@@ -3,7 +3,7 @@ import _, { add, has, isFunction, isNil, isNumber, isString, random, sample } fr
 import { type MaybeRef, unref } from 'vue'
 import { every, scaleLinear } from 'd3'
 import { isEmpty } from 'validator'
-import { generateRandomCategoryPalette } from '../palette'
+import { generateRandomCategoryPalette, gieStainColor} from '../palette'
 import type { ITrack } from '.'
 import { type CircosDataFile, useDataStore } from '@/stores/data'
 
@@ -93,11 +93,13 @@ function pickATextDataset(files: CircosDataFile[]) {
 }
 
 function pickAChordDataset(files: CircosDataFile[]) {
-  return sample(files.filter(f => has(f.content[0], 'start') && has(f.content[0], 'end')))
+  // return sample(files.filter(f => has(f.content[0], 'start') && has(f.content[0], 'end')))
+  return sample(files.filter(f => has(f.content[0], 'source') && has(f.content[0], 'target')))
 }
 
 function pickACategoricalDataset(files: CircosDataFile[]) {
-  return sample(files.filter(f => validPositionalData(f.content) && isString(f.content[0].value)))
+  // return sample(files.filter(f => validPositionalData(f.content) && isString(f.content[0].value)))
+  return sample(files.filter(f => has(f.content[0], 'block_id') && has(f.content[0], 'start') && has(f.content[0], 'end')))
 }
 
 let _id = 0
@@ -108,7 +110,9 @@ function _getId() {
 
 export function useSmartMerge() {
   const dataStore = useDataStore()
+  // @ts-expect-error 先忽略掉TS错
   const pickACategoricalField = (data: Record<string, any>[]) => pickAField(data, FieldType.categorical)
+  // @ts-expect-error 先忽略掉TS错
   const pickANumericField = (data: Record<string, any>[]) => pickAField(data, FieldType.numeric)
   // const pickAnOrdinalField = (data: Record<string, any>[]) => pickAField(data, FieldType.ordinal)
   function pickAKaryotypeField(_data: Record<string, any>[]) {
@@ -124,7 +128,7 @@ export function useSmartMerge() {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
-          labels: { display: false },
+          labels: { radialOffset: 100 },
           ticks: { display: false },
         },
         data,
@@ -134,17 +138,18 @@ export function useSmartMerge() {
     highlight: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.categorical)
 
-      const palette = generateRandomCategoryPalette()
-      const values = _.chain(data).map(encodingField).uniq().value()
-      const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
-
+      // const palette = generateRandomCategoryPalette()
+      // const values = _.chain(data).map(encodingField).uniq().value()
+      // const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
       return {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
           opacity: 0.3,
-          color(d: any) {
-            return colorMap[d.gieStain]
+          // TODO：颜色目前写死了
+          color: function(d: any) {
+            // @ts-expect-error 先忽略掉TS错
+            return gieStainColor[d.gieStain]
           },
           tooltipContent(d: any) {
             return d?.name
@@ -219,7 +224,7 @@ export function useSmartMerge() {
       const values = _.chain(data).map(fillField).uniq().value()
       const colorMap = _.zipObject(values, values.map(() => palette.next().value!))
       const fillColor = (d: any) => {
-        console.log('fillColor', d, d[fillField])
+        // console.log('fillColor', d, d[fillField])
         return useStaticFill || !fillField ? '#f44336' : colorMap[d[fillField]]
       }
       return {
@@ -240,7 +245,6 @@ export function useSmartMerge() {
         type: 'scatter',
       }
     },
-    // 随便写的，之后有空再补
     histogram: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
       const [encodingField, _fieldType] = pickAField(data, FieldType.numeric)
       const min = Math.min(
@@ -255,6 +259,7 @@ export function useSmartMerge() {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
+          color: '#222222',
           min,
           max,
         },
@@ -267,6 +272,20 @@ export function useSmartMerge() {
         config: {
           innerRadius: size.innerRadius,
           outerRadius: size.outerRadius,
+          thickness: 4,
+          margin: 0.01 * length,
+          strokeWidth: 0,
+          color: function (d: any) {
+            if (d.end - d.start > 3000000) {
+              return 'green'
+            } else if (d.end - d.start > 1500000) {
+              return 'red'
+            } else if (d.end - d.start > 1000000) {
+              return 'yellow'
+            } else if (d.end - d.start > 700000) {
+              return 'blue'
+            }
+          },
         },
         data,
         type: 'stack',
@@ -305,6 +324,20 @@ export function useSmartMerge() {
         type: 'heatmap',
       }
     },
+    chord: (size: { innerRadius: number, outerRadius: number }, data: CircosDataFile) => {
+      return {
+        config: {
+          innerRadius: size.innerRadius,
+          outerRadius: size.outerRadius,
+          radius: 0.5,
+          logScale: true,
+          opacity: 0.8,
+          color: '#ff5722',
+        },
+        data, 
+        type: 'chords',
+      }
+    }
   }
 
   const DATA_TYPE: { [key: string]: Function[] } = {
@@ -316,6 +349,7 @@ export function useSmartMerge() {
     heatmap: [pickARangeDataset],
     stack: [pickACategoricalDataset],
     histogram: [pickARangeDataset],
+    chord: [pickAChordDataset],
   }
 
   function normalizeRadius(tracks: ITrack[], layout: { innerRadius: number, outerRadius: number }) {
@@ -433,9 +467,13 @@ export function useSmartMerge() {
     // 新的外半径，要不是最大的外半径，要不是新track的外半径
     const maxNewOutterRadius = Math.max(
       maxOldOutterRadius,
-      new_track.config.outerRadius,
+      new_track.config.outerRadius
     )
-    const scale = scaleLinear().domain([minOldInnerRadius, maxNewOutterRadius]).range([minOldInnerRadius, maxOldOutterRadius])
+    const minNewInnerRadius = Math.min(
+      minOldInnerRadius,
+      new_track.config.innerRadius
+    )
+    const scale = scaleLinear().domain([minNewInnerRadius, maxNewOutterRadius]).range([minNewInnerRadius, maxNewOutterRadius])
 
     return _.chain([
       ...tracks,
@@ -454,8 +492,6 @@ export function useSmartMerge() {
     const new_track = smartMerge(partical_track, ctx, direction, opts)
     const new_tracks = adjustRadius(unref(ctx), new_track, opts)
     // figureStore.tracks = new_tracks
-    // console.log('new track added, new track:', new_track)
-    // console.log('new tracks:', new_tracks)
     return new_tracks
   }
 
@@ -464,7 +500,6 @@ export function useSmartMerge() {
     let tracks = unref(ctx)
     for (const track of partical_tracks_config)
       tracks = adjustRadius(tracks, track, opts)
-
     return tracks
   }
 
