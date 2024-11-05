@@ -67,7 +67,7 @@ function onTrackAdd() {
                 Heatmap
               </SelectItem>
               <SelectItem value="stack">
-                Stack
+                Tile
               </SelectItem>
               <SelectItem value="chord">
                 Chords

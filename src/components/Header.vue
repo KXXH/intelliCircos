@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { Moon, PanelRightClose, PanelRightOpen, Sun } from 'lucide-vue-next'
+import { Moon, PanelRightClose, PanelRightOpen, Sun, ArrowDownToLine } from 'lucide-vue-next'
 import { useDark, useToggle } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import { useLayoutStore } from '@/stores/layout'
+import { useFigureStore } from '@/stores/figure'
+
+const figureStore = useFigureStore()
+
+const download = function() {
+
+}
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -19,6 +26,9 @@ const layoutStore = useLayoutStore()
     </div>
     <div class="flex-1" />
     <div class="flex items-center gap-1 text-primary">
+      <Button variant="outline" size="icon" @click="download()">
+        <ArrowDownToLine class="h-5 w-5" :stroke-width="2" />
+      </Button>
       <Button variant="outline" size="icon" @click="toggleDark()">
         <Transition>
           <Sun v-if="!isDark" class="h-5 w-5" :stroke-width="2" />

@@ -15,6 +15,7 @@ const data = useDataStore()
 const formAttrs = computed(() => {
   // console.log('formAttrs Change!')
   return figure.tracks.map((track) => {
+    console.log(figure.tracks)
     const modelVal = track.config
     const dataset = track.data
     // const modelVal = track.config
@@ -92,7 +93,7 @@ function onConfigChange(id: string, val: Partial<ITrackConfig>) {
   <div class="">
     <GeneralSettings />
     <Form
-      v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" 
+      v-for="attrs in formAttrs" :key="attrs.formTitle" :model-value="attrs.modelVal" :schema="attrs.schema" :attrsId="attrs.id"
       :form-title="attrs.formTitle" :type-map="attrs.typeMap" :option-bindings="attrs.optionBindings" :dataset="attrs.dataset.name"
       @update:model-value="(val: Ref<Partial<ITrackConfig>>) => {
         onConfigChange(attrs.id, toRaw(val))

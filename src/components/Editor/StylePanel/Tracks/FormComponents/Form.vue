@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<{
   optionBindings?: Record<string, Record<string, any>>
   formTitle: string
   showDataSelect?: boolean
+  attrsId?: string
 }>(), {
   showDataSelect: true,
 })
@@ -99,22 +100,27 @@ const data = defineModel<string>('dataset') // data.name
 </script>
 
 <template>
-  <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange" :is-title-change="true">
+  <SettingsPanel v-model:open="open" :panel-title="props.formTitle" @update:open="onOpenStateChange"
+    :is-title-change="true" :attrs-id="props.attrsId!">
     <DataSelect v-if="props.showDataSelect" v-model="data" />
     <form space-y-3>
       <template v-for="key in Object.keys(props.schema.shape)" :key="key">
-        <FormNumber v-if="fieldTypes[key] === FormFieldTypes.NUMBER" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
-        <FormColorPicker v-else-if="fieldTypes[key] === FormFieldTypes.COLOR" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
-        <FormSlider v-else-if="fieldTypes[key] === FormFieldTypes.SLIDER" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
-        <FormSwitch v-else-if="fieldTypes[key] === FormFieldTypes.BOOLEAN" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
-        <FormSelect v-else-if="fieldTypes[key] === FormFieldTypes.ENUM" :label="props.titleMap?.[key] || startCase(key)" :name="key" :description="props.schema.shape[key].description ?? ''" :options="props.optionBindings![key].options" v-bind="props.optionBindings?.[key]" />
-        <FormInput
-          v-else
-          :label="props.titleMap?.[key] || startCase(key)"
-          :description="props.schema.shape[key].description ?? ''"
-          :name="key"
-          v-bind="props.optionBindings?.[key]"
-        />
+        <FormNumber v-if="fieldTypes[key] === FormFieldTypes.NUMBER" :label="props.titleMap?.[key] || startCase(key)"
+          :name="key" :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
+        <FormColorPicker v-else-if="fieldTypes[key] === FormFieldTypes.COLOR"
+          :label="props.titleMap?.[key] || startCase(key)" :name="key"
+          :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
+        <FormSlider v-else-if="fieldTypes[key] === FormFieldTypes.SLIDER"
+          :label="props.titleMap?.[key] || startCase(key)" :name="key"
+          :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
+        <FormSwitch v-else-if="fieldTypes[key] === FormFieldTypes.BOOLEAN"
+          :label="props.titleMap?.[key] || startCase(key)" :name="key"
+          :description="props.schema.shape[key].description ?? ''" v-bind="props.optionBindings?.[key]" />
+        <FormSelect v-else-if="fieldTypes[key] === FormFieldTypes.ENUM" :label="props.titleMap?.[key] || startCase(key)"
+          :name="key" :description="props.schema.shape[key].description ?? ''"
+          :options="props.optionBindings![key].options" v-bind="props.optionBindings?.[key]" />
+        <FormInput v-else :label="props.titleMap?.[key] || startCase(key)"
+          :description="props.schema.shape[key].description ?? ''" :name="key" v-bind="props.optionBindings?.[key]" />
       </template>
     </form>
   </settingspanel>

@@ -67,5 +67,9 @@ export const useFigureStore = defineStore('figure', () => {
     return `<START>${CTMLTracks.slice(1, -1).map(t => t.join('')).reverse().join('<split>')}<END>`
   })
 
-  return { width, tracks, updateTrackConfig, updateTrackData, renderedTracksMap, layout, normalTracks, CTMLConfig }
+  const deleteTrack = (id: string) => {
+    tracks.value = tracks.value.filter(track => track.id !== id).map(t => toRaw(t))
+  }
+
+  return { width, tracks, updateTrackConfig, updateTrackData, renderedTracksMap, layout, normalTracks, CTMLConfig, deleteTrack }
 })

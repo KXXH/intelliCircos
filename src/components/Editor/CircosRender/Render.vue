@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { csvParse } from 'd3'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import { watchDebounced, watchPausable } from '@vueuse/core'
 import _, { before } from 'lodash-es'
 import { useFigureStore } from '@/stores/figure'
@@ -19,6 +19,7 @@ let CircosInstance: ReturnType<typeof Circos> | undefined
 
 const el = ref<HTMLElement>()
 async function render(config: ITrack[], remove = false) {
+  console.log(config)
   console.log('rendering')
   if (!config || config.length === 0)
     return
@@ -54,25 +55,29 @@ async function render(config: ITrack[], remove = false) {
   CircosInstance.render([], remove)
 }
 onMounted(() => {
-  render(figure.tracks)
+  render(_.cloneDeep(figure.tracks))
 })
 
-onMounted(() => {
-  const { pause: pauseFigureConfigWatch, resume: resumeFigureConfigWatch } = watchPausable(figure, () => {
-    pauseFigureConfigWatch()
-    render(_.cloneDeep(figure.tracks), true)
-    setTimeout(() => resumeFigureConfigWatch(), 0)
-    // resumeFigureConfigWatch()
-  }, {
-    deep: true,
-  })
-  // watchDebounced(() => figure.tracks, () => {
-  //   render(_.cloneDeep(figure.tracks), true)
-  // }, {
-  //   debounce: 100,
-  //   deep: true,
-  // })
+watchEffect(() => {
+  render(_.cloneDeep(figure.tracks), true)
 })
+
+// onMounted(() => {
+//   const { pause: pauseFigureConfigWatch, resume: resumeFigureConfigWatch } = watchPausable(figure, () => {
+//     pauseFigureConfigWatch()
+//     render(_.cloneDeep(figure.tracks), true)
+//     setTimeout(() => resumeFigureConfigWatch(), 0)
+//     // resumeFigureConfigWatch()
+//   }, {
+//     deep: true,
+//   })
+//   // watchDebounced(() => figure.tracks, () => {
+//   //   render(_.cloneDeep(figure.tracks), true)
+//   // }, {
+//   //   debounce: 100,
+//   //   deep: true,
+//   // })
+// })
 </script>
 
 <template>
