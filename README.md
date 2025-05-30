@@ -51,7 +51,7 @@ python main.py
 Docker-based deployment is currently under development. A Dockerfile and setup instructions will be provided in future releases.
 
 # Dataset Access
-The dataset used for system demonstration and evaluation is hosted in a separate repository: [Link to be added].
+The dataset used for system demonstration and evaluation is hosted in a separate repository: [IntelliCircos-Dataset](https://github.com/KXXH/IntelliCircos-Dataset).
 
 Due to institutional intellectual property constraints, the complete dataset cannot be made fully public at this time. A limited number of representative Circos plot cases are provided for demonstration and reproducibility.
 
