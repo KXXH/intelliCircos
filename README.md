@@ -73,5 +73,5 @@ If you use IntelliCircos in your research, please cite our EuroVis 2025 paper:
 ```
 
 # Contact
-- Email: kayak9999k@gmail.com
+- Email: kayak9999k@gmail.com, zhumin@scu.edu.cn
 - Contributions via issues and pull requests are welcome.
