@@ -7,7 +7,8 @@
 This project is described in detail in our EuroVis 2025 publication:
 
 > IntelliCircos: A Data-driven and AI-powered Authoring Tool for Circos Plots
-Paper Link: [paper](https://diglib.eg.org/items/20b4a8c0-0583-4627-b574-523d62460cc0)
+>
+> Paper Link: [paper](https://diglib.eg.org/items/20b4a8c0-0583-4627-b574-523d62460cc0)
 
 # Project Structure
 
@@ -17,7 +18,7 @@ Paper Link: [paper](https://diglib.eg.org/items/20b4a8c0-0583-4627-b574-523d6246
 ├── backend/    # Python backend powered by LangChain and vector databases
 └── README.md
 ```
-> 📦 Circos dataset (annotated cases and examples) is hosted in a separate repository: [Link to be added]
+> 📦 Circos dataset (annotated cases and examples) is hosted in a separate repository: [IntelliCircos-Dataset](https://github.com/KXXH/IntelliCircos-Dataset)
 
 # Getting Started
 
@@ -35,7 +36,7 @@ Before running the backend, please download the required language model weights 
 
 👉 [https://huggingface.co/hfl/chinese-llama-2-13b](https://huggingface.co/hfl/chinese-llama-2-13b)
 
-Place the downloaded files in the `backend/` directory.
+Place the downloaded files in project root directory.
 
 Then start the backend service:
 ```
