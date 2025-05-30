@@ -1,46 +1,76 @@
-# frontend
+# IntelliCircos
 
-This template should help get you started developing with Vue 3 in Vite.
+![logo](./public/logo.jpeg)
 
-## Recommended IDE Setup
+**IntelliCircos** is a data-driven and AI-powered authoring tool for Circos plots, designed to support the creation, editing, and exploration of complex circular visualizations. By integrating language models with vector-based semantic retrieval, the system provides intelligent assistance for visual design and semantic editing, particularly suited for fields such as genomics, bioinformatics, and complex network analysis.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+This project is described in detail in our EuroVis 2025 publication:
 
-## Type Support for `.vue` Imports in TS
+> IntelliCircos: A Data-driven and AI-powered Authoring Tool for Circos Plots
+Paper Link: [paper](https://diglib.eg.org/items/20b4a8c0-0583-4627-b574-523d62460cc0)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+# Project Structure
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-pnpm install
 ```
+# intelliCircos/
+├── src/   # Interactive frontend built with Vite + Vue3 + pnpm
+├── backend/    # Python backend powered by LangChain and vector databases
+└── README.md
+```
+> 📦 Circos dataset (annotated cases and examples) is hosted in a separate repository: [Link to be added]
 
-### Compile and Hot-Reload for Development
+# Getting Started
 
-```sh
+## Frontend
+
+```
+pnpm install
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+The frontend will be available at http://localhost:5173.
 
-```sh
-pnpm build
+## Backend
+Before running the backend, please download the required language model weights from:
+
+👉 [https://huggingface.co/hfl/chinese-llama-2-13b](https://huggingface.co/hfl/chinese-llama-2-13b)
+
+Place the downloaded files in the `backend/` directory.
+
+Then start the backend service:
+```
+cd backend
+python -m venv venv
+source venv/bin/activate       # For Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+# Docker Support
 
-```sh
-pnpm lint
+Docker-based deployment is currently under development. A Dockerfile and setup instructions will be provided in future releases.
+
+# Dataset Access
+The dataset used for system demonstration and evaluation is hosted in a separate repository: [Link to be added].
+
+Due to institutional intellectual property constraints, the complete dataset cannot be made fully public at this time. A limited number of representative Circos plot cases are provided for demonstration and reproducibility.
+
+# Citation
+
+If you use IntelliCircos in your research, please cite our EuroVis 2025 paper:
+
+```bibtex
+@article{intelliCircos2025,
+    journal = {Computer Graphics Forum},
+    title = {{IntelliCircos: A Data-driven and AI-powered Authoring Tool for Circos Plots}},
+    author = {Gu, Mingyang and Zhu, Jiamin and Wang, Qipeng and Wang, Fengjie and Wen, Xiaolin and Wang, Yong and Zhu, Min},
+    year = {2025},
+    ISSN = {1467-8659},
+    DOI = {10.1111/cgf.70118}
+}
+
 ```
+
+# Contact
+- Email: kayak9999k@gmail.com
+- Contributions via issues and pull requests are welcome.
