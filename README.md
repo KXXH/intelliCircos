@@ -54,11 +54,8 @@ pip install -r requirements.txt
 python main.py
 ```
 
-# Docker Support
-
-Docker-based deployment is currently under development. A Dockerfile and setup instructions will be provided in future releases.
-
 # Docker Usage
+⚠️ **Note:** The Docker deployment method is currently under development and may encounter issues.
 
 ## Build Docker Image
 
