@@ -58,6 +58,32 @@ python main.py
 
 Docker-based deployment is currently under development. A Dockerfile and setup instructions will be provided in future releases.
 
+# Docker Usage
+
+## Build Docker Image
+
+To build the Docker image, navigate to the project root directory (where the `Dockerfile` is located) and run:
+
+```bash
+docker build -t intellicircos .
+```
+
+## Run Docker Container
+
+After building the image, you can run the container. This will start both the frontend (on port 5173) and the backend (on port 8000).
+
+```bash
+docker run -p 5173:5173 -p 8000:8000 -e OPENAI_API_KEY="YOUR_OPENAI_API_KEY" intellicircos
+```
+
+**Important Notes:**
+
+*   Replace `"YOUR_OPENAI_API_KEY"` with your actual OpenAI API key.
+*   The `hfl/chinese-llama-2-13b` model weights will be downloaded during the image build process. This might take some time and result in a large Docker image.
+*   If you encounter issues with model download or prefer to manage model weights outside the image, consider mounting them as a volume.
+*   **Linux Environment Required:** Docker support for this project is primarily designed for Linux environments. While Docker runs on Windows and macOS, direct CUDA support within Docker containers is best and most reliably achieved on a Linux host with NVIDIA GPU drivers installed.
+*   **CUDA Compatible Environment:** Ensure your host machine has a CUDA-compatible NVIDIA GPU and the necessary NVIDIA drivers installed for the Docker container to utilize CUDA capabilities.
+
 # Dataset Access
 The dataset used for system demonstration and evaluation is hosted in a separate repository: [IntelliCircos-Dataset](https://github.com/KXXH/IntelliCircos-Dataset).
 
